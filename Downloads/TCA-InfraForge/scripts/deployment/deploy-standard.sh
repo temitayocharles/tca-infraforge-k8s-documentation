@@ -3,7 +3,8 @@ set -euo pipefail
 
 # Auto-detected or overridden by config.env
 PROFILE="${DEVOPS_PROFILE:-standard}"
-CONFIG_FILE="kind-cluster-${PROFILE}.yaml"
+ENVIRONMENT="${TCA_ENVIRONMENT:-sandbox}"
+CONFIG_FILE="manifests/base/kind-cluster-${PROFILE}.yaml"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
@@ -57,9 +58,9 @@ deploy_infrastructure() {
     
     # Create KIND cluster
     log "Creating Kubernetes cluster..."
-    if kind get clusters | grep -q "enterprise-devops-${PROFILE}"; then
-        warn "Cluster enterprise-devops-${PROFILE} already exists, deleting..."
-        kind delete cluster --name "enterprise-devops-${PROFILE}"
+    if kind get clusters | grep -q "tca-infraforge-${PROFILE}"; then
+        warn "Cluster tca-infraforge-${PROFILE} already exists, deleting..."
+        kind delete cluster --name "tca-infraforge-${PROFILE}"
     fi
     
     kind create cluster --config "$ROOT_DIR/$CONFIG_FILE" --wait 5m
@@ -69,6 +70,10 @@ deploy_infrastructure() {
     kubectl apply -f "$ROOT_DIR/templates/resource-limits/limitrange-${PROFILE}.yaml"
     kubectl apply -f "$ROOT_DIR/templates/resource-limits/resourcequota-${PROFILE}.yaml"
     kubectl apply -f "$ROOT_DIR/templates/resource-limits/networkpolicy-${PROFILE}.yaml"
+    
+    # Apply TCA InfraForge manifests using Kustomize
+    log "Applying TCA InfraForge manifests..."
+    kubectl apply -k "$ROOT_DIR/manifests/overlays/${ENVIRONMENT}/"
     
     log "Infrastructure deployment complete!"
 }
@@ -116,7 +121,7 @@ main() {
     deploy_monitoring
     deploy_gitops
     
-    log "🎉 Enterprise DevOps Lab deployment complete!"
+    log "🎉 TCA InfraForge Lab deployment complete!"
     log "Access your services:"
     log "  - Grafana: kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80"
     log "  - ArgoCD: kubectl port-forward -n argocd svc/argocd-server 8080:80"

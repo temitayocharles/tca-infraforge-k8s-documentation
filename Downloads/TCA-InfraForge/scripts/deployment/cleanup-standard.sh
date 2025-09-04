@@ -15,9 +15,9 @@ warn() { echo -e "${YELLOW}[$(date +'%H:%M:%S')] WARNING:${NC} $1"; }
 log "Cleaning up ${PROFILE} profile deployment..."
 
 # Delete KIND cluster
-if kind get clusters | grep -q "enterprise-devops-${PROFILE}"; then
+if kind get clusters | grep -q "tca-infraforge-${PROFILE}"; then
     log "Deleting Kubernetes cluster..."
-    kind delete cluster --name "enterprise-devops-${PROFILE}"
+    kind delete cluster --name "tca-infraforge-${PROFILE}"
 fi
 
 # Stop Docker Compose

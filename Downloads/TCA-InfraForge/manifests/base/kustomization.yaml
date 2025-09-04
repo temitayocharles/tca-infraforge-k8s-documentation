@@ -8,6 +8,26 @@ resources:
   - prometheus-basic.yaml
   - fullstack-ingress.yaml
   - letsencrypt-prod-issuer.yaml
+  - admission-control-config.yaml
+  - audit-policy-configmap.yaml
+  - audit-policy.yaml
+  - backend-code-configmap.yaml
+  - enterprise-network-policies.yaml
+  - enterprise-rbac.yaml
+  - enterprise-web-app-simple.yaml
+  - enterprise-web-app.yaml
+  - fluent-bit-logging.yaml
+  - frontend-configmaps.yaml
+  - kind-cluster-2node.yaml
+  - kind-cluster-macos.yaml
+  - kind-cluster-minimal.yaml
+  - kind-cluster-standard.yaml
+  - kind-config.yaml
+  - nginx-config.yaml
+  - pod-security-configmap.yaml
+  - tc-authentik-simple.yaml
+  - tc-monitoring-simple.yaml
+  - tc-service-portal.yaml
 
 patchesStrategicMerge:
   - security-patches.yaml
