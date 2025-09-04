@@ -1,0 +1,229 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: falco-config
+  namespace: falco
+data:
+  falco.yaml: |
+    # Falco configuration for enterprise security monitoring
+    rules_file:
+      - /etc/falco/falco_rules.yaml
+      - /etc/falco/falco_rules.local.yaml
+      - /etc/falco/k8s_audit_rules.yaml
+    plugins:
+      - name: k8saudit
+        library_path: libk8saudit.so
+        init_config:
+          maxEventSize: 262144
+          webhookMaxBatchSize: 125
+    load_plugins: [k8saudit]
+    time_format_iso_8601: true
+    json_output: true
+    json_include_output_property: true
+    json_include_tags_property: true
+    priority: debug
+    buffered_outputs: false
+    syslog_output:
+      enabled: false
+    file_output:
+      enabled: true
+      keep_alive: false
+      filename: /var/log/falco.log
+    stdout_output:
+      enabled: true
+    http_output:
+      enabled: false
+    program_output:
+      enabled: true
+      keep_alive: false
+      program: mail -s "Falco Alert" admin@temitayocharles.online
+    log_stderr: true
+    log_syslog: false
+    log_level: info
+    libs_logger:
+      enabled: false
+      severity: info
+    output_timeout: 2000
+    syscall_event_drops:
+      actions:
+      - log
+      rate: 0.03333
+      max_burst: 1
+      simulate_drops: false
+    base_syscalls:
+      custom_set: []
+      repair: true
+    syscall_event_timeouts:
+      max_consecutives: 1000
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: falco-rules
+  namespace: falco
+data:
+  falco_rules.local.yaml: |
+    # Custom enterprise security rules for TC DevOps Platform
+    - rule: Unauthorized kubectl exec
+      desc: Detect unauthorized kubectl exec commands on sensitive containers
+      condition: >
+        evt.type=execve and
+        container.image.repository in (grafana/grafana, prom/prometheus, argoproj/argocd, jaegertracing/all-in-one) and
+        not user.name in (temitayo-charles, admin, system)
+      output: >
+        Unauthorized kubectl exec detected (user=%user.name container=%container.name image=%container.image.repository)
+      priority: WARNING
+      tags: [k8s, privilege-escalation]
+
+    - rule: Suspicious network connection
+      desc: Detect suspicious outbound network connections
+      condition: >
+        evt.type=connect and
+        fd.net != "127.0.0.1" and
+        not container.image.repository in (grafana/grafana, prom/prometheus) and
+        fd.sport >= 1024
+      output: >
+        Suspicious network connection (container=%container.name destination=%fd.name:%fd.dport)
+      priority: WARNING
+      tags: [network, anomaly]
+
+    - rule: File system changes in config directories
+      desc: Detect unauthorized file system changes in configuration directories
+      condition: >
+        evt.type in (open, openat) and
+        evt.dir = < and
+        fd.name pmatch (/etc/, /config/, /var/lib/) and
+        not user.name in (root, system)
+      output: >
+        File system access to config directory (user=%user.name file=%fd.name container=%container.name)
+      priority: INFO
+      tags: [filesystem, config]
+
+    - rule: Privilege escalation attempt
+      desc: Detect attempts to escalate privileges
+      condition: >
+        evt.type=execve and
+        (proc.cmdline contains "sudo" or proc.cmdline contains "su") and
+        not user.name = root
+      output: >
+        Privilege escalation attempt (user=%user.name command=%proc.cmdline container=%container.name)
+      priority: CRITICAL
+      tags: [privilege-escalation, security]
+
+    - rule: Sensitive file access
+      desc: Detect access to sensitive files
+      condition: >
+        evt.type in (open, openat) and
+        fd.name pmatch (/etc/passwd, /etc/shadow, /root/.ssh/, /home/*/.ssh/) and
+        not proc.name in (sshd, systemd, init)
+      output: >
+        Sensitive file access detected (file=%fd.name process=%proc.name container=%container.name)
+      priority: CRITICAL
+      tags: [filesystem, sensitive-data]
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: falco
+  namespace: falco
+  labels:
+    app: falco
+spec:
+  selector:
+    matchLabels:
+      app: falco
+  template:
+    metadata:
+      labels:
+        app: falco
+    spec:
+      serviceAccountName: falco
+      containers:
+      - name: falco
+        image: falcosecurity/falco:latest
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /host/var/run/docker.sock
+          name: docker-socket
+        - mountPath: /host/proc
+          name: proc-filesystem
+          readOnly: true
+        - mountPath: /host/boot
+          name: boot-filesystem
+          readOnly: true
+        - mountPath: /host/lib/modules
+          name: lib-modules
+          readOnly: true
+        - mountPath: /host/usr
+          name: usr-filesystem
+          readOnly: true
+        - mountPath: /etc/falco
+          name: falco-config
+        - mountPath: /var/log/falco.log
+          name: falco-logs
+        env:
+        - name: FALCO_HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        resources:
+          requests:
+            memory: 512Mi
+            cpu: 250m
+          limits:
+            memory: 1Gi
+            cpu: 500m
+      volumes:
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
+      - name: proc-filesystem
+        hostPath:
+          path: /proc
+      - name: boot-filesystem
+        hostPath:
+          path: /boot
+      - name: lib-modules
+        hostPath:
+          path: /lib/modules
+      - name: usr-filesystem
+        hostPath:
+          path: /usr
+      - name: falco-config
+        configMap:
+          name: falco-config
+      - name: falco-logs
+        hostPath:
+          path: /var/log/falco.log
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: falco
+  namespace: falco
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: falco
+rules:
+- apiGroups: [""]
+  resources: ["nodes", "namespaces", "pods", "events"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["extensions"]
+  resources: ["replicasets"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: falco
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: falco
+subjects:
+- kind: ServiceAccount
+  name: falco
+  namespace: falco

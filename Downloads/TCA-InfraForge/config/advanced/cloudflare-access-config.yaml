@@ -1,0 +1,162 @@
+# Cloudflare Access Configuration for Enterprise DevOps Platform
+# This file contains the configuration for setting up Cloudflare Zero Trust Access
+
+# 1. Create Cloudflare Access Application for ArgoCD
+# Go to: Cloudflare Dashboard → Zero Trust → Access → Applications → Add an Application
+
+argo-cd-app:
+  name: "TC Enterprise ArgoCD"
+  domain: "argocd.temitayocharles.online"
+  type: "self-hosted"
+  policies:
+    - name: "Admin Access"
+      precedence: 1
+      decision: "allow"
+      include:
+        - email:
+            - "your-admin-email@example.com"  # Replace with your email
+        - github:
+            - name: "your-github-org"  # Replace with your GitHub org
+            - teams: ["your-admin-team"]  # Replace with your admin team
+      require:
+        - device_posture:
+            - "managed-device"  # Require managed devices
+
+    - name: "Developer Access"
+      precedence: 2
+      decision: "allow"
+      include:
+        - github:
+            - name: "your-github-org"
+            - teams: ["developers", "devops"]
+      require:
+        - device_posture:
+            - "gateway-managed"
+
+# 2. Create Cloudflare Access Application for Grafana
+grafana-app:
+  name: "TC Enterprise Grafana"
+  domain: "grafana.temitayocharles.online"
+  type: "self-hosted"
+  policies:
+    - name: "Read-Only Access"
+      precedence: 1
+      decision: "allow"
+      include:
+        - github:
+            - name: "your-github-org"
+            - teams: ["developers", "analysts", "managers"]
+      require:
+        - device_posture:
+            - "gateway-managed"
+
+# 3. Create Cloudflare Access Application for Jaeger
+jaeger-app:
+  name: "TC Enterprise Jaeger"
+  domain: "jaeger.temitayocharles.online"
+  type: "self-hosted"
+  policies:
+    - name: "Developer Access"
+      precedence: 1
+      decision: "allow"
+      include:
+        - github:
+            - name: "your-github-org"
+            - teams: ["developers", "devops"]
+      require:
+        - device_posture:
+            - "gateway-managed"
+
+# 4. Device Posture Policies
+# Go to: Cloudflare Dashboard → Zero Trust → Settings → Device Posture
+
+device-posture-policies:
+  managed-device:
+    name: "Managed Device"
+    type: "serial_number"
+    match: "include"
+    values:
+      - "your-device-serial-numbers"  # Add your managed device serials
+
+  gateway-managed:
+    name: "Gateway Managed"
+    type: "gateway"
+    match: "include"
+    values:
+      - "managed"  # Requires Cloudflare WARP client
+
+# 5. Identity Providers
+# Go to: Cloudflare Dashboard → Zero Trust → Settings → Authentication
+
+identity-providers:
+  github:
+    name: "GitHub OAuth"
+    type: "GitHub"
+    config:
+      client_id: "your-github-oauth-app-client-id"
+      client_secret: "your-github-oauth-app-client-secret"
+      scopes: ["read:user", "user:email", "read:org"]
+
+# 6. Gateway Policies (DNS Filtering)
+# Go to: Cloudflare Dashboard → Zero Trust → Gateway → Policies
+
+gateway-policies:
+  block-malicious:
+    name: "Block Malicious Domains"
+    action: "block"
+    precedence: 1
+    filters:
+      - security_categories:
+          - "Malware"
+          - "Command and Control"
+          - "Botnet"
+
+  allow-dev-tools:
+    name: "Allow DevOps Tools"
+    action: "allow"
+    precedence: 2
+    filters:
+      - hostnames:
+          - "*.docker.io"
+          - "*.githubusercontent.com"
+          - "*.kubernetes.io"
+          - "registry-1.docker.io"
+          - "auth.docker.io"
+          - "registry.k8s.io"
+
+# 7. WARP Client Configuration
+# Go to: Cloudflare Dashboard → Zero Trust → Settings → WARP Client
+
+warp-config:
+  mode: "gateway_with_warp"
+  support_url: "https://help.yourcompany.com"
+  organization_name: "TC Enterprise"
+  auto_connect: 15  # Auto-connect after 15 seconds
+  captive_portal: 5  # Captive portal detection timeout
+  disable_udp: false
+
+# 8. Logs and Monitoring
+# Go to: Cloudflare Dashboard → Zero Trust → Logs
+
+log-settings:
+  retention_period: 30  # days
+  log_types:
+    - "access"
+    - "device_posture"
+    - "gateway"
+    - "dns"
+    - "network"
+    - "http"
+    - "audit"
+
+# 9. Emergency Access (Break Glass)
+# Go to: Cloudflare Dashboard → Zero Trust → Access → Emergency Access
+
+emergency-access:
+  name: "Emergency Admin Access"
+  emails:
+    - "emergency-admin@yourcompany.com"
+  duration: 3600  # 1 hour
+  approval_required: true
+  approvers:
+    - "security-team@yourcompany.com"

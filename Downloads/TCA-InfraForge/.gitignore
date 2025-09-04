@@ -1,0 +1,353 @@
+# TC Enterprise DevOps Platform™ - Production Grade .gitignore
+# =================================================================
+
+# =====================================
+# SECURITY & SECRETS (CRITICAL)
+# =====================================
+*.key
+*.pem
+*.crt
+*.csr
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.truststore
+.env
+.env.*
+config.local
+config.secret
+secrets/
+credentials/
+private/
+ssl/
+tls/
+certificates/
+tokens/
+auth/
+.secrets/
+*.password
+*.token
+*.secret
+
+# =====================================
+# OPERATING SYSTEMS
+# =====================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.tmp
+*.temp
+*.bak
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.nfs*
+
+# =====================================
+# DEVELOPMENT ENVIRONMENTS
+# =====================================
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.vim
+.netrwhist
+*~
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+.vimrc.local
+.nvimrc.local
+
+# =====================================
+# CONTAINER & KUBERNETES
+# =====================================
+# Docker
+Dockerfile.local
+docker-compose.override.yml
+docker-compose.local.yml
+.dockerignore.local
+
+# Kubernetes
+kubeconfig
+kubeconfig.*
+*.kubeconfig
+kustomization.local.yaml
+
+# Helm
+charts/*/charts/
+charts/*/requirements.lock
+*.tgz
+
+# Registry
+registry-data/
+registry-cache/
+image-cache/
+
+# =====================================
+# LOGGING & MONITORING
+# =====================================
+logs/
+*.log
+*.log.*
+log/
+audit.log
+access.log
+error.log
+debug.log
+trace.log
+*.out
+*.err
+
+# =====================================
+# BACKUP & TEMPORARY FILES
+# =====================================
+backups/
+backup/
+*.backup
+*.bak
+*.old
+*.orig
+*.save
+tmp/
+temp/
+.tmp/
+.temp/
+cache/
+.cache/
+
+<<<<<<< HEAD
+# =====================================
+# BUILD ARTIFACTS
+# =====================================
+dist/
+build/
+target/
+bin/
+obj/
+out/
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+*.jar
+*.war
+*.ear
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.rar
+*.7z
+*.gz
+*.bz2
+*.xz
+
+# =====================================
+# PROGRAMMING LANGUAGES
+# =====================================
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.cache
+nosetests.xml
+coverage.xml
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.npm
+.eslintcache
+.node_repl_history
+*.tsbuildinfo
+.grunt
+bower_components
+.lock-wscript
+.nyc_output
+.parcel-cache
+
+# Go
+*.exe~
+vendor/
+*.test
+*.prof
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+
+# =====================================
+# DATABASE & DATA
+# =====================================
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+data/
+database/
+pgdata/
+mysql-data/
+postgres-data/
+
+# =====================================
+# CLOUD & INFRASTRUCTURE
+# =====================================
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+terraform.tfvars
+terraform.tfvars.json
+*.tfplan
+*.tflock.hcl
+
+# Ansible
+*.retry
+.vault_pass
+
+# AWS
+.aws/
+aws-credentials
+
+# Azure
+.azure/
+
+# GCP
+gcp-credentials.json
+service-account.json
+
+# =====================================
+# MONITORING & OBSERVABILITY
+# =====================================
+# Prometheus
+prometheus-data/
+alertmanager-data/
+
+# Grafana
+grafana-data/
+grafana.db
+
+# Elasticsearch
+elasticsearch-data/
+
+# =====================================
+# ENTERPRISE-SPECIFIC
+# =====================================
+# LDAP/AD
+ldap-certs/
+ad-config/
+
+# SAML/SSO
+saml-certs/
+sso-config/
+
+# Vault
+vault-data/
+vault-config/
+vault-logs/
+
+# =====================================
+# SYSTEM GENERATED
+# =====================================
+*.pid
+*.sock
+*.lock
+.terraform.lock.hcl
+deployment-status.json
+system-info-*.json
+tc-*-output.log
+tc-*-audit.log
+
+# =====================================
+# LOCAL DEVELOPMENT
+# =====================================
+local/
+local-*
+*-local
+*-local.*
+dev-*
+*-dev
+*-dev.*
+test-data/
+mock-data/
+sample-data/
+
+# =====================================
+# DOCUMENTATION BUILDS
+# =====================================
+docs/_build/
+docs/site/
+site/
+_site/
+.jekyll-cache/
+.bundle/
+
+# =====================================
+# MISCELLANEOUS
+# =====================================
+*.diff
+*.patch
+*.orig
+*.rej
+*conflict*
+.merge_file*
+.coverage
+.hypothesis/
+.prof
+
+# Ignore generated files
+kind-mac-mini.yaml
+registry-data/
+.early.coverage

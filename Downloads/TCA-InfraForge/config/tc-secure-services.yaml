@@ -1,0 +1,70 @@
+# TC Enterprise DevOps Platform™ - Security-Compliant Services
+# All services MUST be ClusterIP only - Single reverse-proxy entrypoint via NGINX Ingress
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: tc-service-portal-service
+  namespace: default
+  labels:
+    app: tc-service-portal
+    security-tier: enterprise
+spec:
+  type: ClusterIP  # ENFORCED: No direct external access
+  selector:
+    app: tc-service-portal
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tc-prometheus-service
+  namespace: default
+  labels:
+    app: tc-prometheus
+    security-tier: enterprise
+spec:
+  type: ClusterIP  # ENFORCED: No direct external access
+  selector:
+    app: tc-prometheus
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service
+  namespace: default
+  labels:
+    app: tc-grafana
+    security-tier: enterprise
+spec:
+  type: ClusterIP  # ENFORCED: No direct external access
+  selector:
+    app: tc-grafana
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-registry
+  namespace: default
+  labels:
+    app: registry
+    security-tier: enterprise
+spec:
+  type: ClusterIP  # ENFORCED: No direct external access
+  selector:
+    app: registry
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000

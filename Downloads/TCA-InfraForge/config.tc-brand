@@ -1,0 +1,143 @@
+# Temitayo Charles Enterprise DevOps Platform™ - Branding Configuration
+# © 2025 Temitayo Charles. All Rights Reserved.
+# Generated on $(date)
+
+# ============================================================================
+# BRAND IDENTITY
+# ============================================================================
+PLATFORM_OWNER="Temitayo Charles"
+PLATFORM_BRAND="TC Enterprise DevOps Stack"
+PLATFORM_TAGLINE="Innovation Through Excellence"
+TRADEMARK_NOTICE="© 2025 Temitayo Charles. All Rights Reserved."
+BRAND_PREFIX="tc"
+COMPANY_DOMAIN="temitayo-charles.enterprise"
+
+# ============================================================================
+# IMAGE BRANDING STRATEGY
+# ============================================================================
+TC_REGISTRY_NAMESPACE="tc-platform"
+TC_VERSION_PREFIX="tc-v"
+TC_BUILD_DATE="$(date +%Y%m%d)"
+TC_ENTERPRISE_TAG="enterprise"
+
+# Image naming convention: localhost:5000/tc-platform/service:tc-v1.0-enterprise
+TC_IMAGE_FORMAT="localhost:5000/${TC_REGISTRY_NAMESPACE}/%s:${TC_VERSION_PREFIX}%s-${TC_ENTERPRISE_TAG}"
+
+# ============================================================================
+# AUDIT CONFIGURATION
+# ============================================================================
+TC_AUDIT_LOG="/var/log/tc-enterprise-audit.log"
+TC_COMPLIANCE_LEVEL="enterprise-grade"
+TC_SECURITY_SCAN_REQUIRED="true"
+TC_CHANGE_TRACKING="enabled"
+
+# ============================================================================
+# BRANDED IMAGE REPOSITORY STRUCTURE
+# ============================================================================
+# Core Platform Services
+TC_GITLAB_IMAGE="localhost:5000/tc-platform/gitlab:tc-v1.0-enterprise"
+TC_AUTHENTIK_IMAGE="localhost:5000/tc-platform/authentik:tc-v1.0-enterprise"
+TC_VAULT_IMAGE="localhost:5000/tc-platform/vault:tc-v1.0-enterprise"
+TC_VSCODE_IMAGE="localhost:5000/tc-platform/vscode:tc-v1.0-enterprise"
+
+# Monitoring Stack
+TC_PROMETHEUS_IMAGE="localhost:5000/tc-monitoring/prometheus:tc-v1.0-enterprise"
+TC_GRAFANA_IMAGE="localhost:5000/tc-monitoring/grafana:tc-v1.0-enterprise"
+TC_JAEGER_IMAGE="localhost:5000/tc-monitoring/jaeger:tc-v1.0-enterprise"
+TC_LOKI_IMAGE="localhost:5000/tc-monitoring/loki:tc-v1.0-enterprise"
+
+# ML/AI Platform
+TC_KUBEFLOW_IMAGE="localhost:5000/tc-ml/kubeflow:tc-v1.0-enterprise"
+TC_JUPYTER_IMAGE="localhost:5000/tc-ml/jupyter:tc-v1.0-enterprise"
+
+# Security Tools
+TC_SONARQUBE_IMAGE="localhost:5000/tc-security/sonarqube:tc-v1.0-enterprise"
+TC_TRIVY_IMAGE="localhost:5000/tc-security/trivy:tc-v1.0-enterprise"
+TC_KYVERNO_IMAGE="localhost:5000/tc-security/kyverno:tc-v1.0-enterprise"
+
+# ============================================================================
+# COMPLETE TC ENTERPRISE IMAGE MAPPING
+# ============================================================================
+
+# Core Platform Services  
+TC_GITLAB_IMAGE="localhost:5000/tc-platform/gitlab:tc-v1.0-enterprise"
+TC_AUTHENTIK_IMAGE="localhost:5000/tc-platform/authentik:tc-v1.0-enterprise"
+TC_VAULT_IMAGE="localhost:5000/tc-platform/vault:tc-v1.0-enterprise"
+TC_VSCODE_IMAGE="localhost:5000/tc-platform/vscode:tc-v1.0-enterprise"
+
+# Infrastructure Services
+TC_REDIS_IMAGE="localhost:5000/tc-infrastructure/redis:tc-v1.0-enterprise"
+TC_POSTGRES_IMAGE="localhost:5000/tc-infrastructure/postgres:tc-v1.0-enterprise"
+TC_MINIO_IMAGE="localhost:5000/tc-infrastructure/minio:tc-v1.0-enterprise"
+TC_NEXUS_IMAGE="localhost:5000/tc-infrastructure/nexus:tc-v1.0-enterprise"
+TC_K3S_IMAGE="localhost:5000/tc-infrastructure/k3s:tc-v1.0-enterprise"
+
+# Monitoring Stack
+TC_PROMETHEUS_IMAGE="localhost:5000/tc-monitoring/prometheus:tc-v1.0-enterprise"
+TC_GRAFANA_IMAGE="localhost:5000/tc-monitoring/grafana:tc-v1.0-enterprise"
+TC_JAEGER_IMAGE="localhost:5000/tc-monitoring/jaeger:tc-v1.0-enterprise"
+TC_LOKI_IMAGE="localhost:5000/tc-monitoring/loki:tc-v1.0-enterprise"
+TC_PROMTAIL_IMAGE="localhost:5000/tc-monitoring/promtail:tc-v1.0-enterprise"
+TC_ALERTMANAGER_IMAGE="localhost:5000/tc-monitoring/alertmanager:tc-v1.0-enterprise"
+
+# ML/AI Platform
+TC_KUBEFLOW_IMAGE="localhost:5000/tc-ml/kubeflow:tc-v1.0-enterprise"
+TC_JUPYTER_IMAGE="localhost:5000/tc-ml/jupyter:tc-v1.0-enterprise"
+TC_TENSORBOARD_IMAGE="localhost:5000/tc-ml/tensorboard:tc-v1.0-enterprise"
+
+# Security Tools
+TC_SONARQUBE_IMAGE="localhost:5000/tc-security/sonarqube:tc-v1.0-enterprise"
+TC_TRIVY_IMAGE="localhost:5000/tc-security/trivy-operator:tc-v1.0-enterprise"
+TC_KYVERNO_IMAGE="localhost:5000/tc-security/kyverno:tc-v1.0-enterprise"
+
+# Service Mesh & Networking
+TC_ISTIO_PILOT_IMAGE="localhost:5000/tc-mesh/istio-pilot:tc-v1.0-enterprise"
+TC_ISTIO_PROXY_IMAGE="localhost:5000/tc-mesh/istio-proxy:tc-v1.0-enterprise"
+TC_CALICO_NODE_IMAGE="localhost:5000/tc-network/calico-node:tc-v1.0-enterprise"
+TC_CALICO_CNI_IMAGE="localhost:5000/tc-network/calico-cni:tc-v1.0-enterprise"
+
+# Chaos Engineering & Workflows
+TC_CHAOS_MESH_IMAGE="localhost:5000/tc-chaos/chaos-mesh:tc-v1.0-enterprise"
+TC_AIRFLOW_IMAGE="localhost:5000/tc-workflow/airflow:tc-v1.0-enterprise"
+TC_KAFKA_IMAGE="localhost:5000/tc-streaming/kafka:tc-v1.0-enterprise"
+TC_ZOOKEEPER_IMAGE="localhost:5000/tc-streaming/zookeeper:tc-v1.0-enterprise"
+
+# ============================================================================
+# DOCKER LABELS FOR ALL TC IMAGES
+# ============================================================================
+TC_DOCKER_LABELS='
+LABEL tc.owner="Temitayo Charles"
+LABEL tc.platform="TC Enterprise DevOps Stack"
+LABEL tc.version="1.0"
+LABEL tc.build-date="'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
+LABEL tc.trademark="© 2025 Temitayo Charles. All Rights Reserved."
+LABEL tc.compliance="enterprise-grade"
+LABEL tc.audit-trail="enabled"
+LABEL tc.security-scan="verified"'
+
+# ============================================================================
+# PLATFORM BRANDING
+# ============================================================================
+TC_PORTAL_TITLE="TC Enterprise DevOps Platform™"
+TC_PORTAL_SUBTITLE="Powered by Temitayo Charles Innovation Labs™"
+TC_PORTAL_FOOTER="© 2025 Temitayo Charles. Innovation Through Excellence."
+
+# Brand colors (customize these to your preference)
+TC_PRIMARY_COLOR="#1e40af"      # Professional blue
+TC_SECONDARY_COLOR="#059669"    # Success green  
+TC_ACCENT_COLOR="#dc2626"       # Alert red
+TC_BACKGROUND_COLOR="#f8fafc"   # Light background
+TC_TEXT_COLOR="#1e293b"         # Dark text
+
+# ============================================================================
+# COMPLIANCE & AUDITING
+# ============================================================================
+TC_COMPLIANCE_FRAMEWORKS="SOC2,ISO27001,NIST"
+TC_AUDIT_RETENTION="7years"
+TC_CHANGE_APPROVAL_REQUIRED="true"
+TC_SECURITY_BASELINE="enterprise"
+
+# Enable branding throughout the platform
+TC_BRANDING_ENABLED="true"
+TC_TRADEMARK_PROTECTION="enabled"
+TC_AUDIT_LOGGING="comprehensive"

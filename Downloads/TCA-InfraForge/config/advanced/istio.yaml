@@ -1,0 +1,372 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: istio-control-plane
+  namespace: istio-system
+spec:
+  profile: demo
+  components:
+    ingressGateways:
+    - name: istio-ingressgateway
+      enabled: true
+      k8s:
+        service:
+          type: ClusterIP
+          ports:
+          - port: 80
+            targetPort: 8080
+            name: http2
+          - port: 443
+            targetPort: 8443
+            name: https
+          - port: 15021
+            targetPort: 15021
+            name: status-port
+          - port: 15443
+            targetPort: 15443
+            name: tls
+    pilot:
+      enabled: true
+      k8s:
+        resources:
+          requests:
+            memory: 512Mi
+            cpu: 250m
+          limits:
+            memory: 1Gi
+            cpu: 500m
+    cni:
+      enabled: false
+    istiodRemote:
+      enabled: false
+  values:
+    global:
+      proxy:
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: 100m
+          limits:
+            memory: 256Mi
+            cpu: 200m
+      istioNamespace: istio-system
+      configValidation: true
+      defaultNodeSelector: {}
+      defaultTolerations: []
+      imagePullPolicy: IfNotPresent
+      logAsJson: false
+      logging:
+        level: "default:info"
+      omitSidecarInjectorConfigMap: false
+      operatorManageWebhooks: false
+      priorityClassName: ""
+      proxy_init:
+        image: proxyv2
+      useMCP: false
+    pilot:
+      autoscaleEnabled: true
+      autoscaleMin: 1
+      autoscaleMax: 5
+      image: pilot
+      traceSampling: 1.0
+      resources:
+        requests:
+          memory: 512Mi
+          cpu: 250m
+        limits:
+          memory: 1Gi
+          cpu: 500m
+    telemetry:
+      enabled: true
+      v2:
+        enabled: true
+        prometheus:
+          enabled: true
+        stackdriver:
+          enabled: false
+        metadataExchange:
+          enabled: true
+        accessLogPolicy:
+          enabled: true
+    security:
+      enabled: true
+    sidecarInjectorWebhook:
+      enableNamespacesByDefault: false
+      injectLabel: istio-injection
+      objectSelector:
+        enabled: false
+      rewriteAppHTTPProbe: true
+    gateways:
+      istio-ingressgateway:
+        autoscaleEnabled: true
+        autoscaleMin: 1
+        autoscaleMax: 2
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: 100m
+          limits:
+            memory: 256Mi
+            cpu: 200m
+        type: ClusterIP
+    mixer:
+      policy:
+        enabled: false
+      telemetry:
+        enabled: false
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: tc-enterprise-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*.temitayocharles.online"
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: temitayocharles-tls
+    hosts:
+    - "*.temitayocharles.online"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: grafana-vs
+  namespace: default
+spec:
+  hosts:
+  - grafana.temitayocharles.online
+  gateways:
+  - istio-system/tc-enterprise-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: tc-grafana-enterprise
+        port:
+          number: 3000
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: prometheus-vs
+  namespace: default
+spec:
+  hosts:
+  - prometheus.temitayocharles.online
+  gateways:
+  - istio-system/tc-enterprise-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: tc-prometheus
+        port:
+          number: 9090
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: jaeger-vs
+  namespace: observability
+spec:
+  hosts:
+  - jaeger.temitayocharles.online
+  gateways:
+  - istio-system/tc-enterprise-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: tc-enterprise-jaeger-query
+        port:
+          number: 16686
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: kibana-vs
+  namespace: logging
+spec:
+  hosts:
+  - kibana.temitayocharles.online
+  gateways:
+  - istio-system/tc-enterprise-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: kibana-kibana
+        port:
+          number: 5601
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: argocd-vs
+  namespace: argocd
+spec:
+  hosts:
+  - argocd.temitayocharles.online
+  gateways:
+  - istio-system/tc-enterprise-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: argocd-server
+        port:
+          number: 443
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: faas-vs
+  namespace: openfaas
+spec:
+  hosts:
+  - faas.temitayocharles.online
+  gateways:
+  - istio-system/tc-enterprise-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: gateway
+        port:
+          number: 8080
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: default
+spec:
+  mtls:
+    mode: PERMISSIVE
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: strict-mtls
+  namespace: istio-system
+spec:
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-nothing
+  namespace: default
+spec: {}
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-grafana
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: tc-grafana-enterprise
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: ["*"]
+    to:
+    - operation:
+        methods: ["GET", "POST"]
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-prometheus
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: tc-prometheus
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: ["*"]
+    to:
+    - operation:
+        methods: ["GET"]
+---
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: mesh-default
+  namespace: default
+spec:
+  tracing:
+  - randomSamplingPercentage: 1.0
+  metrics:
+  - providers:
+    - name: prometheus
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: grafana-dr
+  namespace: default
+spec:
+  host: tc-grafana-enterprise
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+    loadBalancer:
+      simple: ROUND_ROBIN
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http1MaxPendingRequests: 10
+        maxRequestsPerConnection: 10
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: prometheus-dr
+  namespace: default
+spec:
+  host: tc-prometheus
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+    loadBalancer:
+      simple: ROUND_ROBIN
+    connectionPool:
+      tcp:
+        maxConnections: 50
+      http:
+        http1MaxPendingRequests: 5
+        maxRequestsPerConnection: 5

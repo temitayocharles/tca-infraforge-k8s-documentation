@@ -1,0 +1,86 @@
+# KIND Cluster Configuration - macOS Optimized
+# Compatible with Apple Silicon and resolves kubelet issues
+# Simplified configuration for reliability
+
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: tc-enterprise
+nodes:
+  # Control Plane Node - Enterprise VM Configuration
+  - role: control-plane
+    kubeadmConfigPatches:
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "node-role.kubernetes.io/control-plane=true,tier=control,environment=enterprise-vm"
+            max-pods: "110"
+            kube-reserved: "cpu=400m,memory=768Mi"
+            system-reserved: "cpu=200m,memory=512Mi"
+      - |
+        kind: ClusterConfiguration
+        kubernetesVersion: v1.32.2
+        apiServer:
+          extraArgs:
+            enable-admission-plugins: NodeRestriction,MutatingAdmissionWebhook,ValidatingAdmissionWebhook
+            audit-log-maxage: "30"
+            audit-log-maxbackup: "5"
+            audit-log-maxsize: "100"
+        controllerManager:
+          extraArgs:
+            bind-address: "0.0.0.0"
+        scheduler:
+          extraArgs:
+            bind-address: "0.0.0.0"
+    extraPortMappings:
+      # HTTP/HTTPS Ingress
+      - containerPort: 80
+        hostPort: 8080
+        protocol: TCP
+      - containerPort: 443
+        hostPort: 8443
+        protocol: TCP
+      # Enterprise NodePort Services
+      - containerPort: 30000
+        hostPort: 30000
+        protocol: TCP
+      - containerPort: 30001
+        hostPort: 30001
+        protocol: TCP
+      - containerPort: 30002
+        hostPort: 30002
+        protocol: TCP
+
+  # Worker Node - Enterprise Workload Distribution
+  - role: worker
+    kubeadmConfigPatches:
+      - |
+        kind: JoinConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "node-type=worker,workload=enterprise,tier=worker,zone=vm-optimized"
+            max-pods: "110"
+            kube-reserved: "cpu=300m,memory=512Mi"
+            system-reserved: "cpu=100m,memory=256Mi"
+
+# Enterprise VM Networking
+networking:
+  podSubnet: "10.244.0.0/16"
+  serviceSubnet: "10.96.0.0/12"
+  disableDefaultCNI: false
+  kubeProxyMode: "iptables"
+
+# VM-Compatible Feature Gates
+featureGates:
+  EphemeralContainers: true
+  CronJobTimeZone: true
+  PodAndContainerStatsFromCRI: true
+  GracefulNodeShutdown: true
+
+# Container Runtime Optimization for VM
+containerdConfigPatches:
+  - |
+    [plugins."io.containerd.grpc.v1.cri".containerd]
+      snapshotter = "overlayfs"
+    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+      SystemdCgroup = true

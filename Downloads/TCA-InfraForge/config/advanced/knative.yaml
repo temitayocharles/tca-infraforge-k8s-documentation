@@ -1,0 +1,180 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-network
+  namespace: knative-serving
+data:
+  # Enable external domain TLS
+  external-domain-tls: "true"
+  # Configure ingress class
+  ingress.class: "nginx"
+  # Auto TLS configuration
+  auto-tls: "Enabled"
+  # Domain template for Knative services
+  domain-template: "{{.Name}}.{{.Namespace}}.temitayocharles.online"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-autoscaler
+  namespace: knative-serving
+data:
+  # Enable scale to zero
+  enable-scale-to-zero: "true"
+  # Scale to zero grace period
+  scale-to-zero-grace-period: "30s"
+  # Target concurrency per pod
+  container-concurrency-target-default: "100"
+  # Target utilization percentage
+  container-concurrency-target-percentage: "70"
+  # Max scale up rate
+  max-scale-up-rate: "10"
+  # Max scale down rate
+  max-scale-down-rate: "2"
+  # Stable window for autoscaling
+  stable-window: "60s"
+  # Panic window for rapid scaling
+  panic-window: "6s"
+  # Panic threshold percentage
+  panic-threshold-percentage: "200"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-features
+  namespace: knative-serving
+data:
+  # Enable Kubernetes alpha features
+  kubernetes.podspec-affinity: "enabled"
+  # Enable multi-container support
+  kubernetes.podspec-containers: "enabled"
+  # Enable podspec fieldRefs
+  kubernetes.podspec-fieldref: "enabled"
+  # Enable podspec security context
+  kubernetes.podspec-securitycontext: "enabled"
+  # Enable podspec volumes
+  kubernetes.podspec-volumes: "enabled"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-observability
+  namespace: knative-serving
+data:
+  # Enable request logging
+  logging.enable-request-log: "true"
+  # Request log template
+  logging.request-log-template: '{"httpRequest": {"requestMethod": "{{.Request.Method}}", "requestUrl": "{{.Request.RequestURI}}", "status": {{.Response.Code}}, "responseSize": "{{.Response.Size}}", "userAgent": "{{.Request.UserAgent}}", "remoteIp": "{{.Request.RemoteAddr}}", "serverIp": "{{.Request.Host}}", "referer": "{{.Request.Referer}}", "latency": "{{.Response.Latency}}", "protocol": "{{.Request.Proto}}"}, "traceId": "{{.TraceId}}"}'
+  # Enable metrics
+  metrics.backend-destination: "prometheus"
+  # Enable profiling
+  profiling.enable: "true"
+---
+apiVersion: eventing.knative.dev/v1
+kind: Broker
+metadata:
+  name: default
+  namespace: default
+  annotations:
+    eventing.knative.dev/broker.class: MTChannelBasedBroker
+spec: {}
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: log-events
+  namespace: default
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: dev.knative.samples.helloworld
+  subscriber:
+    ref:
+      apiVersion: v1
+      kind: Service
+      name: event-logger
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-logger
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-logger
+  template:
+    metadata:
+      labels:
+        app: event-logger
+    spec:
+      containers:
+      - name: event-logger
+        image: gcr.io/knative-releases/knative.dev/eventing/cmd/event_display
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        resources:
+          requests:
+            memory: 64Mi
+            cpu: 50m
+          limits:
+            memory: 128Mi
+            cpu: 100m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-logger
+  namespace: default
+spec:
+  selector:
+    app: event-logger
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: hello-world
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - image: gcr.io/knative-samples/helloworld-go
+        env:
+        - name: TARGET
+          value: "Knative on TC Enterprise Platform"
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: 100m
+          limits:
+            memory: 256Mi
+            cpu: 200m
+---
+apiVersion: sources.knative.dev/v1
+kind: PingSource
+metadata:
+  name: test-ping-source
+  namespace: default
+spec:
+  schedule: "*/2 * * * *"
+  contentType: "application/json"
+  data: '{"message": "Hello from PingSource!"}'
+  sink:
+    ref:
+      apiVersion: eventing.knative.dev/v1
+      kind: Broker
+      name: default

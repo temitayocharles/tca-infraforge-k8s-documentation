@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tc-api-service
+  namespace: default
+  labels:
+    app: tc-api
+    tier: enterprise
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tc-api
+  template:
+    metadata:
+      labels:
+        app: tc-api
+        tier: enterprise
+    spec:
+      serviceAccount: tc-api-service-account
+      containers:
+      - name: tc-api
+        image: ghcr.io/temitayocharles/tc-enterprise-devops-platform/tc-infrastructure-api:tc-v1.0-enterprise
+        ports:
+        - containerPort: 8080
+        env:
+        - name: TC_PLATFORM
+          value: "TC Enterprise DevOps Platform™"
+        - name: TC_OWNER
+          value: "Temitayo Charles"
+        - name: TC_DOMAIN
+          value: "temitayocharles.online"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health  
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 15
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tc-api-service
+  namespace: default
+  labels:
+    app: tc-api
+    tier: enterprise
+spec:
+  type: ClusterIP
+  selector:
+    app: tc-api
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tc-api-service-account
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: tc-api-reader
+rules:
+- apiGroups: [""]
+  resources: ["services", "pods", "endpoints"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tc-api-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tc-api-reader
+subjects:
+- kind: ServiceAccount
+  name: tc-api-service-account
+  namespace: default

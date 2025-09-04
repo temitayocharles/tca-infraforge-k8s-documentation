@@ -1,0 +1,245 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openfaas-config
+  namespace: openfaas
+data:
+  gateway_config: |
+    # OpenFaaS Gateway configuration
+    faas-nats:
+      address: "nats.openfaas.svc.cluster.local"
+      port: 4222
+    faas-idler:
+      enabled: true
+      idle_duration: 15m
+    faas-prometheus:
+      enabled: true
+    faas-queue-worker:
+      enabled: true
+      max_inflight: 1
+    faas-gateway:
+      read_timeout: 65s
+      write_timeout: 65s
+      upstream_timeout: 60s
+      scale_from_zero: true
+      max_idle_conns: 1024
+      max_idle_conns_per_host: 1024
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: openfaas
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+    scrape_configs:
+    - job_name: 'gateway'
+      static_configs:
+      - targets: ['gateway.openfaas:8080']
+    - job_name: 'faas-netes'
+      static_configs:
+      - targets: ['faas-netes.openfaas:8080']
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nats-config
+  namespace: openfaas
+data:
+  nats.conf: |
+    # NATS configuration for OpenFaaS
+    listen: 0.0.0.0:4222
+    http: 0.0.0.0:8222
+    cluster {
+      listen: 0.0.0.0:6222
+    }
+    jetstream {
+      store_dir: /data/jetstream
+      max_memory_store: 1GB
+      max_file_store: 10GB
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats
+  namespace: openfaas
+  labels:
+    app: nats
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nats
+  template:
+    metadata:
+      labels:
+        app: nats
+    spec:
+      containers:
+      - name: nats
+        image: nats:2.9-alpine
+        ports:
+        - containerPort: 4222
+          name: client
+        - containerPort: 8222
+          name: http
+        - containerPort: 6222
+          name: cluster
+        volumeMounts:
+        - name: nats-config
+          mountPath: /etc/nats-config
+        - name: nats-data
+          mountPath: /data
+        command:
+        - nats-server
+        - -c
+        - /etc/nats-config/nats.conf
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: 50m
+          limits:
+            memory: 256Mi
+            cpu: 100m
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8222
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8222
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      volumes:
+      - name: nats-config
+        configMap:
+          name: nats-config
+      - name: nats-data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats
+  namespace: openfaas
+  labels:
+    app: nats
+spec:
+  ports:
+  - port: 4222
+    targetPort: 4222
+    name: client
+  selector:
+    app: nats
+  type: ClusterIP
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: figlet
+  namespace: openfaas-fn
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "10"
+    spec:
+      containers:
+      - image: functions/figlet:latest
+        env:
+        - name: fprocess
+          value: "figlet"
+        resources:
+          requests:
+            memory: 64Mi
+            cpu: 50m
+          limits:
+            memory: 128Mi
+            cpu: 100m
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: markdown
+  namespace: openfaas-fn
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "5"
+    spec:
+      containers:
+      - image: functions/markdown-render:latest
+        env:
+        - name: fprocess
+          value: "pandoc -f markdown -t html"
+        resources:
+          requests:
+            memory: 64Mi
+            cpu: 50m
+          limits:
+            memory: 128Mi
+            cpu: 100m
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: nodeinfo
+  namespace: openfaas-fn
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "3"
+    spec:
+      containers:
+      - image: functions/nodeinfo:latest
+        env:
+        - name: fprocess
+          value: "nodeinfo"
+        resources:
+          requests:
+            memory: 64Mi
+            cpu: 50m
+          limits:
+            memory: 128Mi
+            cpu: 100m
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: function-scaler
+  namespace: openfaas
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: openfaas-operator
+          containers:
+          - name: scaler
+            image: openfaas/faas-cli:latest
+            command:
+            - faas-cli
+            - describe
+            - --gateway
+            - http://gateway.openfaas:8080
+            - --functions
+            resources:
+              requests:
+                memory: 64Mi
+                cpu: 50m
+              limits:
+                memory: 128Mi
+                cpu: 100m
+          restartPolicy: OnFailure

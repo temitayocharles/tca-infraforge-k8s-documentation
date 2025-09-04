@@ -1,0 +1,133 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-code
+  namespace: fullstack-app
+data:
+  package.json: |
+    {
+      "name": "enterprise-backend-api",
+      "version": "1.0.0",
+      "description": "Enterprise Full-Stack Backend API",
+      "main": "server.js",
+      "scripts": {
+        "start": "node server.js",
+        "migrate": "node migrate.js"
+      },
+      "dependencies": {
+        "express": "^4.18.2",
+        "pg": "^8.11.0",
+        "cors": "^2.8.5",
+        "helmet": "^7.0.0",
+        "dotenv": "^16.3.1"
+      }
+    }
+  server.js: |
+    const express = require('express');
+    const { Pool } = require('pg');
+    const cors = require('cors');
+    const helmet = require('helmet');
+
+    const app = express();
+    const port = process.env.PORT || 3000;
+
+    // Database connection
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+    });
+
+    // Security middleware
+    app.use(helmet());
+    app.use(cors());
+    app.use(express.json());
+
+    // Health check endpoint
+    app.get('/health', async (req, res) => {
+      try {
+        await pool.query('SELECT 1');
+        res.json({ status: 'healthy', timestamp: new Date().toISOString() });
+      } catch (error) {
+        res.status(500).json({ status: 'unhealthy', error: error.message });
+      }
+    });
+
+    // API endpoints
+    app.get('/api/users', async (req, res) => {
+      try {
+        const result = await pool.query('SELECT id, name, email, created_at FROM users ORDER BY created_at DESC');
+        res.json(result.rows);
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    });
+
+    app.post('/api/users', async (req, res) => {
+      try {
+        const { name, email } = req.body;
+        const result = await pool.query(
+          'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
+          [name, email]
+        );
+        res.status(201).json(result.rows[0]);
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    });
+
+    app.get('/api/stats', async (req, res) => {
+      try {
+        const userCount = await pool.query('SELECT COUNT(*) as count FROM users');
+        const dbSize = await pool.query('SELECT pg_size_pretty(pg_database_size($1)) as size', ['fullstackdb']);
+        res.json({
+          users: parseInt(userCount.rows[0].count),
+          database_size: dbSize.rows[0].size,
+          uptime: process.uptime(),
+          timestamp: new Date().toISOString()
+        });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    });
+
+    app.listen(port, () => {
+      console.log(`Enterprise Backend API listening on port ${port}`);
+    });
+  migrate.js: |
+    const { Pool } = require('pg');
+
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+    });
+
+    async function migrate() {
+      try {
+        console.log('Running database migrations...');
+
+        await pool.query(`
+          CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            email VARCHAR(255) UNIQUE NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+          )
+        `);
+
+        // Insert sample data
+        await pool.query(`
+          INSERT INTO users (name, email) VALUES
+          ('John Doe', 'john@example.com'),
+          ('Jane Smith', 'jane@example.com'),
+          ('Bob Johnson', 'bob@example.com')
+          ON CONFLICT (email) DO NOTHING
+        `);
+
+        console.log('Migrations completed successfully!');
+      } catch (error) {
+        console.error('Migration failed:', error);
+        process.exit(1);
+      } finally {
+        await pool.end();
+      }
+    }
+
+    migrate();

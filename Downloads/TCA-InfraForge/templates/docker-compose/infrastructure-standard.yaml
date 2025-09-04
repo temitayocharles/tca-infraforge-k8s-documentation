@@ -1,0 +1,111 @@
+# Infrastructure Docker Compose for standard profile
+# Memory limits optimized for 8GB system
+
+version: '3.8'
+
+services:
+  # Redis HA Setup
+  redis-master:
+    image: redis:7-alpine
+    container_name: redis-master-standard
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+        reservations:
+          memory: 128m
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_master_data:/data
+    networks:
+      - devops-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  redis-replica:
+    image: redis:7-alpine
+    container_name: redis-replica-standard
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+        reservations:
+          memory: 128m
+    ports:
+      - "6380:6379"
+    command: redis-server --replicaof redis-master 6379
+    depends_on:
+      redis-master:
+        condition: service_healthy
+    volumes:
+      - redis_replica_data:/data
+    networks:
+      - devops-network
+
+  # PostgreSQL HA
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-standard
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+        reservations:
+          memory: 256m
+    environment:
+      POSTGRES_DB: devops_db
+      POSTGRES_USER: devops_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme123}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - devops-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devops_user -d devops_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # HashiCorp Vault
+  vault:
+    image: hashicorp/vault:latest
+    container_name: vault-standard
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+        reservations:
+          memory: 128m
+    cap_add:
+      - IPC_LOCK
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_ROOT_TOKEN:-dev-token-123}
+      VAULT_DEV_LISTEN_ADDRESS: 0.0.0.0:8200
+    ports:
+      - "8200:8200"
+    networks:
+      - devops-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8200/v1/sys/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  redis_master_data:
+  redis_replica_data:
+  postgres_data:
+
+networks:
+  devops-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

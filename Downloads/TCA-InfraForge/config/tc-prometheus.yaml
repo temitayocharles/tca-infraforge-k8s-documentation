@@ -1,0 +1,112 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tc-prometheus-config
+  namespace: default
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+
+    rule_files:
+      # - "first.rules"
+      # - "second.rules"
+
+    scrape_configs:
+      - job_name: 'prometheus'
+        static_configs:
+          - targets: ['localhost:9090']
+
+      - job_name: 'kubernetes-pods'
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+            action: replace
+            target_label: __metrics_path__
+            regex: (.+)
+          - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            regex: ([^:]+)(?::\d+)?;(\d+)
+            replacement: $1:$2
+            target_label: __address__
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_pod_name]
+            action: replace
+            target_label: kubernetes_pod_name
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tc-prometheus
+  namespace: default
+  labels:
+    app: tc-prometheus
+    tc.owner: "temitayo-charles"
+    tc.platform: "tc-enterprise-devops"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tc-prometheus
+  template:
+    metadata:
+      labels:
+        app: tc-prometheus
+        tc.owner: "temitayo-charles"
+    spec:
+      containers:
+      - name: prometheus
+        image: prom/prometheus:v2.53.1
+        ports:
+        - containerPort: 9090
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/prometheus/
+        - name: storage-volume
+          mountPath: /prometheus/
+        command:
+          - '/bin/prometheus'
+          - '--config.file=/etc/prometheus/prometheus.yml'
+          - '--storage.tsdb.path=/prometheus/'
+          - '--web.console.libraries=/etc/prometheus/console_libraries'
+          - '--web.console.templates=/etc/prometheus/consoles'
+          - '--web.enable-lifecycle'
+          - '--web.external-url=http://localhost/prometheus/'
+          - '--web.route-prefix=/prometheus/'
+        env:
+        - name: TC_OWNER
+          value: "Temitayo Charles"
+        - name: TC_PLATFORM
+          value: "TC Enterprise DevOps Stack"
+      volumes:
+      - name: config-volume
+        configMap:
+          name: tc-prometheus-config
+      - name: storage-volume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tc-prometheus-service
+  namespace: default
+  labels:
+    app: tc-prometheus
+    tc.owner: "temitayo-charles"
+spec:
+  selector:
+    app: tc-prometheus
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+  type: ClusterIP

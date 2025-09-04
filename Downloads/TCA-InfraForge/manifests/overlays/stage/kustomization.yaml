@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+commonLabels:
+  environment: stage
+
+patchesStrategicMerge:
+  - stage-patches.yaml
+
+images:
+  - name: backend-api
+    newTag: stage
+  - name: frontend
+    newTag: stage

@@ -1,0 +1,125 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tc-service-portal-config
+  namespace: default
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>🚀 TC Enterprise DevOps Platform™</title>
+        <style>
+            body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin: 0; padding: 20px; }
+            .container { max-width: 1200px; margin: 0 auto; }
+            .header { text-align: center; margin-bottom: 40px; }
+            .header h1 { font-size: 3rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+            .owner-badge { background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 25px; display: inline-block; margin: 10px; }
+            .services { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+            .service-card { background: rgba(255,255,255,0.1); border-radius: 15px; padding: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+            .service-card h3 { color: #FFD700; margin-bottom: 10px; }
+            .service-link { display: inline-block; background: #FF6B6B; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; margin-top: 10px; }
+            .service-link:hover { background: #FF5252; }
+            .status { color: #4CAF50; font-weight: bold; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🚀 TC Enterprise DevOps Platform™</h1>
+                <div class="owner-badge">👑 Owned by Temitayo Charles</div>
+                <div class="owner-badge">🏢 TC Enterprise DevOps Stack</div>
+                <div class="owner-badge">🌐 temitayocharles.online</div>
+            </div>
+            <div class="services">
+                <div class="service-card">
+                    <h3>🔒 Authentik SSO</h3>
+                    <p>Enterprise authentication and identity management</p>
+                    <div class="status">✅ Active</div>
+                    <a href="/" class="service-link">🔗 Access Portal</a>
+                </div>
+                <div class="service-card">
+                    <h3>📊 Grafana Analytics</h3>
+                    <p>Beautiful dashboards and metrics visualization</p>
+                    <div class="status">✅ Active</div>
+                    <a href="/grafana" class="service-link">🔗 Open Dashboards</a>
+                </div>
+                <div class="service-card">
+                    <h3>📈 Prometheus Metrics</h3>
+                    <p>Time-series metrics collection and monitoring</p>
+                    <div class="status">✅ Active</div>
+                    <a href="/prometheus" class="service-link">🔗 Query Metrics</a>
+                </div>
+                <div class="service-card">
+                    <h3>☸️ Kubernetes Dashboard</h3>
+                    <p>Kubernetes cluster management interface</p>
+                    <div class="status">✅ Active</div>
+                    <a href="/kubernetes" class="service-link">🔗 Manage Cluster</a>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px; opacity: 0.8;">
+                <p>🛡️ Secured & Isolated • 🚀 Enterprise Grade • © 2025 Temitayo Charles</p>
+            </div>
+        </div>
+    </body>
+    </html>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tc-service-portal
+  labels:
+    app: tc-service-portal
+    tc.enterprise/owner: "temitayo-charles"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tc-service-portal
+  template:
+    metadata:
+      labels:
+        app: tc-service-portal
+    spec:
+      containers:
+      - name: portal
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: portal-config
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: portal-config
+        configMap:
+          name: tc-service-portal-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tc-service-portal-service
+spec:
+  selector:
+    app: tc-service-portal
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tc-service-portal-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - host: temitayocharles.online
+    http:
+      paths:
+      - path: /portal
+        pathType: Prefix
+        backend:
+          service:
+            name: tc-service-portal-service
+            port:
+              number: 80

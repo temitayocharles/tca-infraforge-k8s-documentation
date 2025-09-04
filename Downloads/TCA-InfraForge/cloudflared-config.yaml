@@ -1,0 +1,29 @@
+tunnel: temitayocharles-tunnel
+credentials-file: /Users/charlie/.cloudflared/fa1e3a1d-46f7-4aa7-8010-3a41c5a8c623.json
+
+ingress:
+  - hostname: argocd.temitayocharles.online
+    service: https://istio-ingressgateway.istio-system.svc.cluster.local
+    originRequest:
+      originServerName: argocd.temitayocharles.online
+  - hostname: grafana.temitayocharles.online
+    service: https://istio-ingressgateway.istio-system.svc.cluster.local
+    originRequest:
+      originServerName: grafana.temitayocharles.online
+  - hostname: prometheus.temitayocharles.online
+    service: https://istio-ingressgateway.istio-system.svc.cluster.local
+    originRequest:
+      originServerName: prometheus.temitayocharles.online
+  - hostname: jaeger.temitayocharles.online
+    service: https://istio-ingressgateway.istio-system.svc.cluster.local
+    originRequest:
+      originServerName: jaeger.temitayocharles.online
+  - hostname: kibana.temitayocharles.online
+    service: https://istio-ingressgateway.istio-system.svc.cluster.local
+    originRequest:
+      originServerName: kibana.temitayocharles.online
+  - hostname: faas.temitayocharles.online
+    service: https://istio-ingressgateway.istio-system.svc.cluster.local
+    originRequest:
+      originServerName: faas.temitayocharles.online
+  - service: http_status:404

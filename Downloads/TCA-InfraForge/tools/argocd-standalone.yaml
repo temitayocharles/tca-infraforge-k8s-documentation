@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-server-standalone
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: argocd-server
+  template:
+    metadata:
+      labels:
+        app: argocd-server
+    spec:
+      containers:
+      - name: argocd-server
+        image: argoproj/argocd:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ARGOCD_SERVER_INSECURE
+          value: "true"
+        - name: ARGOCD_ADMIN_PASSWORD
+          value: "TCEnterprise2025!"
+        command:
+        - /usr/local/bin/argocd-server
+        - --insecure
+        - --staticassets
+        - /shared/app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: argocd-service
+  namespace: default
+spec:
+  selector:
+    app: argocd-server
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: ClusterIP

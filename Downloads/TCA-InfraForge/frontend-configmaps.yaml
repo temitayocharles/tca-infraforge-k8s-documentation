@@ -1,0 +1,177 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-code
+  namespace: fullstack-app
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Enterprise Full-Stack App</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+            .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+            h1 { color: #2c3e50; text-align: center; }
+            .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+            .stat-card { background: #ecf0f1; padding: 15px; border-radius: 5px; text-align: center; }
+            .users { margin: 20px 0; }
+            .user-card { background: #3498db; color: white; padding: 10px; margin: 10px 0; border-radius: 5px; }
+            .health { padding: 10px; background: #27ae60; color: white; border-radius: 5px; margin: 10px 0; }
+            .error { padding: 10px; background: #e74c3c; color: white; border-radius: 5px; margin: 10px 0; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🚀 Enterprise Full-Stack Application</h1>
+            <div id="health-status"></div>
+            <div class="stats" id="stats"></div>
+            <div class="users">
+                <h2>👥 Users</h2>
+                <div id="users-list"></div>
+            </div>
+        </div>
+
+        <script>
+            const API_BASE = '/api';
+
+            async function checkHealth() {
+                try {
+                    const response = await fetch(`${API_BASE}/health`);
+                    const data = await response.json();
+                    document.getElementById('health-status').innerHTML =
+                        `<div class="health">✅ API Status: ${data.status} | Last checked: ${new Date(data.timestamp).toLocaleString()}</div>`;
+                    return true;
+                } catch (error) {
+                    document.getElementById('health-status').innerHTML =
+                        `<div class="error">❌ API Status: Unhealthy - ${error.message}</div>`;
+                    return false;
+                }
+            }
+
+            async function loadStats() {
+                try {
+                    const response = await fetch(`${API_BASE}/stats`);
+                    const data = await response.json();
+                    document.getElementById('stats').innerHTML = `
+                        <div class="stat-card">
+                            <h3>👥 Total Users</h3>
+                            <div style="font-size: 2em; color: #3498db;">${data.users}</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>💾 Database Size</h3>
+                            <div style="font-size: 1.5em; color: #27ae60;">${data.database_size}</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>⏱️ API Uptime</h3>
+                            <div style="font-size: 1.5em; color: #e67e22;">${Math.floor(data.uptime / 3600)}h ${Math.floor((data.uptime % 3600) / 60)}m</div>
+                        </div>
+                    `;
+                } catch (error) {
+                    console.error('Failed to load stats:', error);
+                }
+            }
+
+            async function loadUsers() {
+                try {
+                    const response = await fetch(`${API_BASE}/users`);
+                    const users = await response.json();
+                    const usersHtml = users.map(user =>
+                        `<div class="user-card">
+                            <strong>${user.name}</strong><br>
+                            📧 ${user.email}<br>
+                            <small>Joined: ${new Date(user.created_at).toLocaleDateString()}</small>
+                        </div>`
+                    ).join('');
+                    document.getElementById('users-list').innerHTML = usersHtml;
+                } catch (error) {
+                    document.getElementById('users-list').innerHTML = '<div class="error">Failed to load users</div>';
+                }
+            }
+
+            // Initialize the application
+            async function init() {
+                await checkHealth();
+                await loadStats();
+                await loadUsers();
+            }
+
+            // Refresh data every 30 seconds
+            init();
+            setInterval(init, 30000);
+        </script>
+    </body>
+    </html>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-nginx-config
+  namespace: fullstack-app
+data:
+  nginx.conf: |
+    # user nginx;
+    worker_processes auto;
+    error_log /var/log/nginx/error.log notice;
+    pid /var/run/nginx.pid;
+
+    events {
+        worker_connections 1024;
+    }
+
+    http {
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+
+        log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for"';
+
+        access_log /var/log/nginx/access.log main;
+
+        sendfile on;
+        tcp_nopush on;
+        tcp_nodelay on;
+        keepalive_timeout 65;
+        types_hash_max_size 2048;
+
+        # Use writable temp directories
+        client_body_temp_path /var/cache/nginx/client_temp;
+        proxy_temp_path /var/cache/nginx/proxy_temp;
+        fastcgi_temp_path /var/cache/nginx/fastcgi_temp;
+        uwsgi_temp_path /var/cache/nginx/uwsgi_temp;
+        scgi_temp_path /var/cache/nginx/scgi_temp;
+
+        server {
+            listen 8080;
+            server_name localhost;
+
+            root /usr/share/nginx/html;
+            index index.html;
+
+            # API proxy to backend
+            location /api/ {
+                proxy_pass http://backend-api.fullstack-app.svc.cluster.local:3000/;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                # Disable buffering for read-only filesystem
+                proxy_buffering off;
+            }
+
+            # Frontend routes
+            location / {
+                try_files $uri $uri/ /index.html;
+            }
+
+            # Health check
+            location /health {
+                access_log off;
+                return 200 "frontend healthy\n";
+                add_header Content-Type text/plain;
+            }
+        }
+    }

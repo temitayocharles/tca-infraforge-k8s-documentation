@@ -1,0 +1,220 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: velero-config
+  namespace: velero
+data:
+  velero-config.yaml: |
+    # Velero configuration for enterprise backup/restore
+    defaultBackupStorageLocation: default
+    defaultVolumeSnapshotLocation: default
+    restoreOnlyMode: false
+    disableInformerCache: false
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: velero-credentials
+  namespace: velero
+type: Opaque
+data:
+  # This is a placeholder - in production, use real cloud credentials
+  cloud: |
+    [default]
+    aws_access_key_id = minioadmin
+    aws_secret_access_key = minioadmin
+---
+apiVersion: velero.io/v1
+kind: BackupStorageLocation
+metadata:
+  name: default
+  namespace: velero
+spec:
+  provider: aws
+  objectStorage:
+    bucket: velero-backups
+    prefix: ""
+  config:
+    region: minio
+    s3Url: http://minio.minio.svc:9000
+    s3ForcePathStyle: "true"
+    publicUrl: http://minio.minio.svc:9000
+---
+apiVersion: velero.io/v1
+kind: VolumeSnapshotLocation
+metadata:
+  name: default
+  namespace: velero
+spec:
+  provider: aws
+  config:
+    region: minio
+---
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: daily-backup
+  namespace: velero
+spec:
+  schedule: "0 2 * * *"  # Daily at 2 AM UTC
+  template:
+    includedNamespaces:
+    - default
+    - kube-system
+    - istio-system
+    - observability
+    - logging
+    - argocd
+    - gatekeeper-system
+    - falco
+    - knative-serving
+    - openfaas
+    ttl: 720h0m0s  # 30 days retention
+    storageLocation: default
+    volumeSnapshotLocations:
+    - default
+    defaultVolumesToRestic: true
+---
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: hourly-backup
+  namespace: velero
+spec:
+  schedule: "0 * * * *"  # Every hour
+  template:
+    includedNamespaces:
+    - default
+    - kube-system
+    ttl: 24h0m0s  # 24 hours retention
+    storageLocation: default
+    volumeSnapshotLocations:
+    - default
+    defaultVolumesToRestic: true
+---
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  name: initial-platform-backup
+  namespace: velero
+spec:
+  includedNamespaces:
+  - default
+  - kube-system
+  - istio-system
+  - observability
+  - logging
+  - argocd
+  - gatekeeper-system
+  - falco
+  storageLocation: default
+  ttl: 720h0m0s
+  defaultVolumesToRestic: true
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+  namespace: velero
+  labels:
+    app: minio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+      - name: minio
+        image: minio/minio:latest
+        command:
+        - minio
+        - server
+        - /data
+        - --console-address
+        - :9001
+        env:
+        - name: MINIO_ACCESS_KEY
+          value: "minioadmin"
+        - name: MINIO_SECRET_KEY
+          value: "minioadmin"
+        ports:
+        - containerPort: 9000
+          name: api
+        - containerPort: 9001
+          name: console
+        volumeMounts:
+        - name: minio-data
+          mountPath: /data
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 100m
+          limits:
+            memory: 512Mi
+            cpu: 250m
+        readinessProbe:
+          httpGet:
+            path: /minio/health/ready
+            port: 9000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /minio/health/live
+            port: 9000
+          initialDelaySeconds: 30
+          periodSeconds: 30
+      volumes:
+      - name: minio-data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+  namespace: velero
+  labels:
+    app: minio
+spec:
+  ports:
+  - port: 9000
+    targetPort: 9000
+    name: api
+  - port: 9001
+    targetPort: 9001
+    name: console
+  selector:
+    app: minio
+  type: ClusterIP
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-minio-bucket
+  namespace: velero
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: create-bucket
+        image: minio/mc:latest
+        command:
+        - /bin/sh
+        - -c
+        - |
+          mc alias set minio http://minio.velero.svc:9000 minioadmin minioadmin
+          mc mb minio/velero-backups || true
+          mc policy set public minio/velero-backups || true
+        resources:
+          requests:
+            memory: 64Mi
+            cpu: 50m
+          limits:
+            memory: 128Mi
+            cpu: 100m

@@ -1,0 +1,19 @@
+# Minimal KIND Cluster Configuration for Apple Silicon
+# Based on default KIND setup that works reliably
+# Minimal configuration with essential port mappings only
+
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: tc-enterprise
+nodes:
+  # Single node - both control plane and worker
+  - role: control-plane
+    extraPortMappings:
+      # HTTP
+      - containerPort: 80
+        hostPort: 8080
+        protocol: TCP
+      # HTTPS
+      - containerPort: 443
+        hostPort: 8443
+        protocol: TCP

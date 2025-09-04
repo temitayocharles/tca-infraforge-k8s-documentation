@@ -1,0 +1,123 @@
+# 2-node variant of enterprise cluster (1 control-plane + 1 worker)
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: enterprise-devops-2node
+
+nodes:
+  - role: control-plane
+    kubeadmConfigPatches:
+    - |
+      kind: InitConfiguration
+      nodeRegistration:
+        kubeletExtraArgs:
+          node-labels: "node.kubernetes.io/control-plane=true,node-type=master,profile=enterprise,tc-owner=temitayo-charles"
+          max-pods: "110"
+          kube-reserved: "cpu=500m,memory=1Gi"
+          system-reserved: "cpu=250m,memory=512Mi"
+          eviction-hard: "memory.available<500Mi,nodefs.available<1Gi,imagefs.available<2Gi"
+          cgroup-driver: "systemd"
+    - |
+      kind: ClusterConfiguration
+      etcd:
+        local:
+          dataDir: /var/lib/etcd
+      apiServer:
+        extraArgs:
+          enable-admission-plugins: NodeRestriction,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,PodSecurity
+          audit-log-path: "/var/log/kubernetes/audit.log"
+          authorization-mode: "Node,RBAC"
+      controllerManager:
+        extraArgs:
+          node-monitor-grace-period: "40s"
+          node-monitor-period: "5s"
+      scheduler:
+        extraArgs:
+          bind-address: "0.0.0.0"
+    - |
+      apiVersion: kubelet.config.k8s.io/v1beta1
+      kind: KubeletConfiguration
+      maxOpenFiles: 1048576
+      maxPods: 110
+    extraPortMappings:
+    - containerPort: 80
+      hostPort: 8080
+      protocol: TCP
+    - containerPort: 443
+      hostPort: 8443
+      protocol: TCP
+    - containerPort: 6443
+      hostPort: 6443
+      protocol: TCP
+
+  - role: worker
+    kubeadmConfigPatches:
+    - |
+      kind: JoinConfiguration
+      nodeRegistration:
+        kubeletExtraArgs:
+          node-labels: "node.kubernetes.io/worker=true,node-type=worker,worker-index=1,profile=enterprise,tc-owner=temitayo-charles"
+          max-pods: "110"
+          kube-reserved: "cpu=200m,memory=512Mi"
+          system-reserved: "cpu=100m,memory=256Mi"
+          eviction-hard: "memory.available<500Mi,nodefs.available<1Gi,imagefs.available<2Gi"
+          cgroup-driver: "systemd"
+    - |
+      apiVersion: kubelet.config.k8s.io/v1beta1
+      kind: KubeletConfiguration
+      maxOpenFiles: 1048576
+      maxPods: 110
+    - |
+      apiVersion: kubeadm.k8s.io/v1beta3
+      kind: JoinConfiguration
+      patches:
+        directory: /etc/systemd/system/kubelet.service.d
+      files:
+        - path: /etc/systemd/system/kubelet.service.d/10-ulimits.conf
+          content: |
+            [Service]
+            LimitNOFILE=1048576
+    extraMounts:
+    - hostPath: /lib/modules
+      containerPath: /lib/modules
+      readOnly: true
+    extraPortMappings:
+    - containerPort: 80
+      hostPort: 8081
+      protocol: TCP
+    - containerPort: 443
+      hostPort: 8444
+      protocol: TCP
+
+networking:
+  podSubnet: "10.244.0.0/16"
+  serviceSubnet: "10.96.0.0/12"
+  disableDefaultCNI: false
+  kubeProxyMode: "iptables"
+  ipFamily: "ipv4"
+
+featureGates:
+  CronJobTimeZone: true
+  PodAndContainerStatsFromCRI: true
+  GracefulNodeShutdown: true
+  NodeSwap: false
+
+containerdConfigPatches:
+- |
+  [plugins."io.containerd.grpc.v1.cri".containerd]
+    snapshotter = "overlayfs"
+    default_runtime_name = "runc"
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+    runtime_type = "io.containerd.runc.v2"
+    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+      SystemdCgroup = true
+      [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options.Rlimit]
+        type = "RLIMIT_NOFILE"
+        hard = 1048576
+        soft = 1048576
+  [plugins."io.containerd.grpc.v1.cri".registry]
+    [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
+      [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:5000"]
+        endpoint = ["http://devops-registry:5000"]
+    [plugins."io.containerd.grpc.v1.cri".registry.configs]
+      [plugins."io.containerd.grpc.v1.cri".registry.configs."localhost:5000".tls]
+        insecure_skip_verify = true

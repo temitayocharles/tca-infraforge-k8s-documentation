@@ -1,0 +1,128 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-api
+  namespace: fullstack-app
+  labels:
+    app: backend-api
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend-api
+  template:
+    metadata:
+      labels:
+        app: backend-api
+        tier: backend
+    spec:
+      containers:
+      - name: api
+        image: node:18-alpine
+        ports:
+        - containerPort: 3000
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://appuser:securepassword123@postgres:5432/fullstackdb"
+        - name: NODE_ENV
+          value: "production"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          cat > /tmp/server.js << 'EOF'
+          const http = require('http');
+          const url = require('url');
+          
+          const server = http.createServer((req, res) => {
+            const parsedUrl = url.parse(req.url, true);
+            const path = parsedUrl.pathname;
+          
+            // Set CORS headers
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+            res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+          
+            if (req.method === 'OPTIONS') {
+              res.writeHead(200);
+              res.end();
+              return;
+            }
+          
+            // Health check endpoint
+            if (path === '/health') {
+              res.writeHead(200, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({
+                status: 'healthy',
+                timestamp: new Date().toISOString(),
+                uptime: process.uptime()
+              }));
+              return;
+            }
+          
+            // Users endpoint
+            if (path === '/api/users') {
+              const users = [
+                { id: 1, name: 'John Doe', email: 'john@example.com', created_at: '2025-08-30T07:00:00Z' },
+                { id: 2, name: 'Jane Smith', email: 'jane@example.com', created_at: '2025-08-30T07:00:00Z' },
+                { id: 3, name: 'Bob Johnson', email: 'bob@example.com', created_at: '2025-08-30T07:00:00Z' }
+              ];
+              res.writeHead(200, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify(users));
+              return;
+            }
+          
+            // Stats endpoint
+            if (path === '/api/stats') {
+              const stats = {
+                users: 3,
+                database_size: '16 MB',
+                uptime: Math.floor(process.uptime()),
+                timestamp: new Date().toISOString()
+              };
+              res.writeHead(200, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify(stats));
+              return;
+            }
+          
+            // Default response
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Not found' }));
+          });
+          
+          const port = process.env.PORT || 3000;
+          server.listen(port, () => {
+            console.log(`Enterprise Backend API listening on port ${port}`);
+          });
+          EOF
+          node /tmp/server.js
+      # volumes:
+      # - name: app-code
+      #   configMap:
+      #     name: backend-code
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-api
+  namespace: fullstack-app
+spec:
+  selector:
+    app: backend-api
+  ports:
+  - port: 3000
+    targetPort: 3000
+  type: ClusterIP

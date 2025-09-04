@@ -1,0 +1,128 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tc-grafana-dashboards
+  namespace: default
+data:
+  tc-platform-dashboard.json: |
+    {
+      "dashboard": {
+        "title": "TC Enterprise DevOps Platform™ - Executive Dashboard",
+        "tags": ["tc-enterprise", "platform", "executive"],
+        "timezone": "browser",
+        "panels": [
+          {
+            "title": "Platform Health Overview",
+            "type": "stat",
+            "targets": [
+              {
+                "expr": "up",
+                "legendFormat": "Services Online"
+              }
+            ],
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "steps": [
+                    {"color": "red", "value": 0},
+                    {"color": "yellow", "value": 0.5}, 
+                    {"color": "green", "value": 0.8}
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "title": "TC Enterprise Services",
+            "type": "table",
+            "targets": [
+              {
+                "expr": "prometheus_build_info",
+                "legendFormat": "Build Info"
+              }
+            ]
+          },
+          {
+            "title": "Resource Utilization", 
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "rate(container_cpu_usage_seconds_total[5m])",
+                "legendFormat": "CPU Usage"
+              }
+            ]
+          }
+        ],
+        "time": {
+          "from": "now-1h",
+          "to": "now"
+        },
+        "refresh": "5s"
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tc-grafana-enterprise
+  namespace: default
+  labels:
+    app: tc-grafana
+    tier: enterprise
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tc-grafana
+  template:
+    metadata:
+      labels:
+        app: tc-grafana
+        tier: enterprise
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          value: "TCEnterprise2025!"
+        - name: GF_SERVER_SERVE_FROM_SUB_PATH
+          value: "true"
+        - name: GF_SERVER_ROOT_URL
+          value: "http://localhost/grafana/"
+        - name: GF_INSTALL_PLUGINS
+          value: "grafana-kubernetes-app,grafana-piechart-panel"
+        - name: GF_ENTERPRISE_LICENSE_TEXT
+          value: ""
+        - name: TC_OWNER
+          value: "Temitayo Charles"
+        - name: TC_PLATFORM  
+          value: "TC Enterprise DevOps Platform™"
+        volumeMounts:
+        - name: grafana-storage
+          mountPath: /var/lib/grafana
+        - name: dashboards
+          mountPath: /etc/grafana/provisioning/dashboards
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 60
+          periodSeconds: 30
+      volumes:
+      - name: grafana-storage
+        emptyDir: {}
+      - name: dashboards
+        configMap:
+          name: tc-grafana-dashboards

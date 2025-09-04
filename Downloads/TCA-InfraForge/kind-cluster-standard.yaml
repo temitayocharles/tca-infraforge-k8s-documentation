@@ -1,0 +1,116 @@
+# Enterprise KIND Cluster Configuration - VM Optimized
+# Profile: standard | Architecture: multi-platform | VM-ready enterprise simulation  
+# Resources: 1 control plane, 2 workers for true enterprise workload distribution
+
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: tc-enterprise
+nodes:
+  # Control Plane Node - Enterprise Configuration
+  - role: control-plane
+    kubeadmConfigPatches:
+    - |
+      kind: InitConfiguration
+      nodeRegistration:
+        kubeletExtraArgs:
+          node-labels: "node-role.kubernetes.io/control-plane=true,tier=control,environment=enterprise"
+          max-pods: "110"
+          kube-reserved: "cpu=500m,memory=1Gi"
+          system-reserved: "cpu=200m,memory=512Mi"
+          eviction-hard: "memory.available<100Mi,nodefs.available<10%"
+    - |
+      kind: ClusterConfiguration
+      kubernetesVersion: v1.32.2
+      etcd:
+        local:
+          dataDir: /var/lib/etcd
+          extraArgs:
+            listen-metrics-urls: "http://0.0.0.0:2381"
+      apiServer:
+        extraArgs:
+          enable-admission-plugins: NodeRestriction,MutatingAdmissionWebhook,ValidatingAdmissionWebhook
+          audit-log-maxage: "30"
+          audit-log-maxbackup: "10" 
+          audit-log-maxsize: "100"
+          service-account-signing-key-file: "/etc/kubernetes/pki/sa.key"
+          service-account-key-file: "/etc/kubernetes/pki/sa.pub"
+      controllerManager:
+        extraArgs:
+          bind-address: "0.0.0.0"
+          secure-port: "10257"
+      scheduler:
+        extraArgs:
+          bind-address: "0.0.0.0"
+          secure-port: "10259"
+    extraPortMappings:
+    # HTTP/HTTPS Ingress
+    - containerPort: 80
+      hostPort: 8080
+      protocol: TCP
+    - containerPort: 443
+      hostPort: 8443
+      protocol: TCP
+    # Enterprise NodePort Services
+    - containerPort: 30000
+      hostPort: 30000
+      protocol: TCP
+    - containerPort: 30001
+      hostPort: 30001
+      protocol: TCP
+    - containerPort: 30002
+      hostPort: 30002
+      protocol: TCP
+    # Monitoring and Observability
+    - containerPort: 30090
+      hostPort: 30090
+      protocol: TCP
+    - containerPort: 30091
+      hostPort: 30091
+      protocol: TCP
+      
+  # Worker Node 1 - Compute Workloads
+  - role: worker
+    kubeadmConfigPatches:
+    - |
+      kind: JoinConfiguration
+      nodeRegistration:
+        kubeletExtraArgs:
+          node-labels: "node-type=worker,workload=compute,tier=worker,zone=primary"
+          max-pods: "110"
+          kube-reserved: "cpu=300m,memory=512Mi"
+          system-reserved: "cpu=100m,memory=256Mi"
+          
+  # Worker Node 2 - Storage/Database Workloads  
+  - role: worker
+    kubeadmConfigPatches:
+    - |
+      kind: JoinConfiguration
+      nodeRegistration:
+        kubeletExtraArgs:
+          node-labels: "node-type=worker,workload=storage,tier=worker,zone=secondary"
+          max-pods: "110"
+          kube-reserved: "cpu=300m,memory=512Mi"
+          system-reserved: "cpu=100m,memory=256Mi"
+
+# Enterprise Networking Configuration
+networking:
+  podSubnet: "10.244.0.0/16"
+  serviceSubnet: "10.96.0.0/12"
+  disableDefaultCNI: false
+  kubeProxyMode: "iptables"
+
+# Enterprise Feature Gates
+featureGates:
+  EphemeralContainers: true
+  CronJobTimeZone: true
+  PodAndContainerStatsFromCRI: true
+  GracefulNodeShutdown: true
+  NodeSwap: false
+
+# Container Runtime Configuration for Enterprise
+containerdConfigPatches:
+- |
+  [plugins."io.containerd.grpc.v1.cri".containerd]
+    snapshotter = "overlayfs"
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+    SystemdCgroup = true

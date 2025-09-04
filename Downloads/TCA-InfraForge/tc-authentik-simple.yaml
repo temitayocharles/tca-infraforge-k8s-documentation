@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authentik
+  namespace: authentik
+  labels:
+    app.kubernetes.io/name: authentik
+    app.kubernetes.io/instance: tc-enterprise
+    app.kubernetes.io/component: server
+    tc.enterprise/owner: "temitayo-charles"
+    tc.enterprise/platform: "tc-enterprise-devops"
+    tc.enterprise/version: "v1.0-enterprise"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: authentik
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: authentik
+        tc.enterprise/service: "sso-authentication"
+    spec:
+      containers:
+      - name: authentik-server
+        image: ghcr.io/goauthentik/server:2024.2.2
+        env:
+        - name: AUTHENTIK_REDIS__HOST
+          value: redis-service
+        - name: AUTHENTIK_POSTGRESQL__HOST
+          value: postgres-service
+        - name: AUTHENTIK_POSTGRESQL__NAME
+          value: authentik
+        - name: AUTHENTIK_POSTGRESQL__USER
+          value: authentik
+        - name: AUTHENTIK_POSTGRESQL__PASSWORD
+          value: tc-enterprise-password
+        - name: AUTHENTIK_SECRET_KEY
+          value: tc-enterprise-secret-key-change-in-production
+        - name: AUTHENTIK_BOOTSTRAP_PASSWORD
+          value: tc-admin-password
+        - name: AUTHENTIK_BOOTSTRAP_EMAIL
+          value: admin@temitayocharles.online
+        ports:
+        - containerPort: 9000
+        - containerPort: 9443
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authentik-service
+  namespace: authentik
+spec:
+  selector:
+    app.kubernetes.io/name: authentik
+  ports:
+  - name: http
+    port: 80
+    targetPort: 9000
+  - name: https
+    port: 443
+    targetPort: 9443
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: authentik-ingress
+  namespace: authentik
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - host: temitayocharles.online
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: authentik-service
+            port:
+              number: 80
