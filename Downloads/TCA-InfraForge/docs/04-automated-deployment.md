@@ -499,6 +499,36 @@ Now that you understand the deployment process, you're ready to:
 2. **[📊 Monitoring & Observability](./07-monitoring-observability.md)** - Set up comprehensive monitoring
 3. **[🔒 Security & Compliance](./09-security-compliance.md)** - Understand security implementations
 
+---
+
+## 🌍 Environment-Specific Deployments
+
+TCA InfraForge supports **multiple environments** with different configurations:
+
+### Available Environments
+- **Sandbox**: Development environment with minimal resources
+- **Stage**: Testing environment with moderate scaling
+- **Production**: Full production setup with high availability
+
+### How It Works
+Each environment uses **Kustomize overlays** to customize:
+- Number of replicas (1 for sandbox, 2 for stage, 3 for prod)
+- Resource limits and requests
+- Image versions and tags
+- Environment-specific configurations
+
+### Quick Deployment Commands
+```bash
+# Deploy to sandbox
+make deploy-sandbox
+
+# Deploy to stage  
+make deploy-stage
+
+# Deploy to production
+make deploy-prod
+```
+
 **💡 Pro Tip:** The deployment process is designed to be **idempotent** - you can run it multiple times safely, and it will only make necessary changes!
 
 ---

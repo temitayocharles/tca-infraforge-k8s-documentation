@@ -752,6 +752,31 @@ TCA InfraForge's security implementation provides **enterprise-grade protection*
 
 ---
 
+## 🔧 Implemented Security Hardening
+
+TCA InfraForge automatically applies **production-ready security** to all deployments:
+
+### Container Security
+- **Non-root execution:** All containers run as non-root users
+- **Read-only filesystems:** Prevents unauthorized file modifications
+- **Dropped capabilities:** Removes unnecessary Linux capabilities
+- **Security contexts:** Enforced for all pods and containers
+
+### Resource Protection
+- **CPU and memory limits:** Prevents resource exhaustion attacks
+- **Requests and limits:** Ensures fair resource allocation
+- **Pod disruption budgets:** Maintains availability during updates
+
+### Network Security
+- **Network policies:** Isolates traffic between services
+- **TLS encryption:** Secures all communications
+- **Ingress security:** Protects external access points
+
+### Automated Security
+All security measures are applied automatically through **Kustomize patches** - no manual configuration needed!
+
+---
+
 ## 🎯 What's Next?
 
 Now that you understand security, you're ready to:

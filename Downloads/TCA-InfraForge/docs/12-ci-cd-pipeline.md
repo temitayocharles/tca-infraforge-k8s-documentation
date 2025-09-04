@@ -1059,4 +1059,29 @@ Now that you have a complete CI/CD pipeline, you're ready to:
 
 ---
 
+## 🔄 Implemented CI/CD Pipeline
+
+TCA InfraForge includes **ready-to-use GitHub Actions** for automated pipelines:
+
+### GitHub Actions Workflows
+- **CI Pipeline**: `.github/workflows/ci.yaml`
+  - Lints Kubernetes manifests with Kubeval
+  - Validates YAML syntax
+  - Scans for security vulnerabilities with Trivy
+  - Uploads security scan results to GitHub
+
+### Automated Checks
+- **Pull Request Validation**: Runs on every PR
+- **Security Scanning**: Container vulnerability detection
+- **Manifest Validation**: Ensures Kubernetes YAML correctness
+- **YAML Linting**: Consistent formatting and syntax
+
+### Quick Setup
+1. Push code to GitHub repository
+2. GitHub Actions automatically run on PRs and pushes
+3. View results in the Actions tab
+4. Security findings appear in Security tab
+
+---
+
 *Ready to contribute to TCA InfraForge? Let's move to the Contributing & Development chapter to learn how to extend and improve the platform!* 🤝

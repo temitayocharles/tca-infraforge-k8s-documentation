@@ -599,4 +599,24 @@ Now that you understand monitoring, you're ready to:
 
 ---
 
+## 📈 Implemented Monitoring Stack
+
+TCA InfraForge comes with a **production-ready monitoring setup**:
+
+### Pre-Configured Components
+- **Prometheus**: Metrics collection and storage
+- **Grafana**: Visualization dashboards
+- **AlertManager**: Alert routing and management
+- **Node Exporter**: System-level metrics
+- **Fluent Bit**: Log aggregation
+
+### Automatic Setup
+All monitoring components are deployed automatically through the **Kustomize manifests**. No manual configuration required!
+
+### Access Points
+- **Grafana**: `kubectl port-forward svc/prometheus-grafana 3000:80`
+- **Prometheus**: `kubectl port-forward svc/prometheus-kube-prometheus-prometheus 9090:9090`
+
+---
+
 *Ready to secure your platform? Let's move to the Security & Compliance chapter to understand how TCA InfraForge protects your enterprise data!* 🔒
