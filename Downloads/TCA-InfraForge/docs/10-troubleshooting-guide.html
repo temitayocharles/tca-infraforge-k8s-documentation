@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCA InfraForge Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            padding: 30px;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .pagination {
+            justify-content: center;
+        }
+
+        .page-link {
+            color: #667eea;
+        }
+
+        .page-link:hover {
+            color: #764ba2;
+        }
+
+        .btn-prev,
+        .btn-next {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+        }
+
+        .btn-prev:hover,
+        .btn-next:hover {
+            background: linear-gradient(45deg, #764ba2, #667eea);
+            color: white;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #333;
+        }
+
+        code {
+            background: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: #ecf0f1;
+        }
+
+        body.dark-mode .container {
+            background: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        body.dark-mode .navbar {
+            background: rgba(44, 62, 80, 0.9);
+        }
+
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 {
+            color: #ecf0f1;
+        }
+
+        body.dark-mode code {
+            background: #34495e;
+            color: #ecf0f1;
+        }
+
+        body.dark-mode pre {
+            background: #34495e;
+            color: #ecf0f1;
+        }
+
+        body.dark-mode table th {
+            background-color: #34495e;
+        }
+
+        body.dark-mode table td {
+            border-color: #7f8c8d;
+        }
+
+        .copy-btn {
+            opacity: 0.7;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+        }
+
+        .content {
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">TCA InfraForge Docs</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Pages</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="01-executive-summary.html">1. Executive Summary</a></li>
+                            <li><a class="dropdown-item" href="02-architecture-overview.html">2. Architecture
+                                    Overview</a></li>
+                            <li><a class="dropdown-item" href="03-quick-start-guide.html">3. Quick Start Guide</a></li>
+                            <li><a class="dropdown-item" href="04-automated-deployment.html">4. Automated Deployment</a>
+                            </li>
+                            <li><a class="dropdown-item" href="05-container-kubernetes.html">5. Container &
+                                    <img src="https://kubernetes.io/images/favicon.png" alt="Kubernetes"
+                                        style="height:1.2em; vertical-align:middle;"> Kubernetes</a></li>
+                            <li><a class="dropdown-item" href="06-networking-ingress.html">6. Networking & Ingress</a>
+                            </li>
+                            <li><a class="dropdown-item" href="07-monitoring-observability.html">7. Monitoring &
+                                    Observability</a></li>
+                            <li><a class="dropdown-item" href="08-enterprise-applications.html">8. Enterprise
+                                    Applications</a></li>
+                            <li><a class="dropdown-item" href="09-security-compliance.html">9. Security & Compliance</a>
+                            </li>
+                            <li><a class="dropdown-item" href="10-cloudflare-integration.html">10. Cloudflare
+                                    Integration</a></li>
+                            <li><a class="dropdown-item" href="11-performance-optimization.html">11. Performance
+                                    Optimization</a></li>
+                            <li><a class="dropdown-item" href="12-ci-cd-pipeline.html">12. CI/CD Pipeline</a></li>
+                            <li><a class="dropdown-item" href="13-contributing-development.html">13. Contributing &
+                                    Development</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="d-flex me-2">
+                    <input class="form-control me-2" type="search" placeholder="Search headings..." id="searchInput">
+                </form>
+                <div class="d-flex">
+                    <button class="btn btn-outline-secondary me-2" id="darkModeToggle">
+                        <i class="fas fa-moon"></i> Dark
+                    </button>
+                    <button class="btn btn-prev me-2" id="prevBtn">Previous</button>
+                    <button class="btn btn-next" id="nextBtn">Next</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="progressBar" style="height: 4px; background: linear-gradient(45deg, #667eea, #764ba2); width: 0%; position: fixed; top: 0; left: 0; z-index: 1000;"></div>
+
+    <div class="container">
+        <nav aria-label="Page navigation">
+            <ul class="pagination" id="pagination">
+                <!-- Pagination will be generated by JS -->
+            </ul>
+        </nav>
+
+        <div class="content">
+            <h1 id="chapter-10-troubleshooting-guide">🔧 Chapter 10: Troubleshooting Guide</h1>
+<h2 id="tc-enterprise-devops-platform">🏆 TC Enterprise DevOps Platform™</h2>
+<p><strong>Comprehensive Troubleshooting &amp; Problem Resolution</strong></p>
+<hr />
+<h2 id="common-issues-solutions">🚨 Common Issues &amp; Solutions</h2>
+<h3 id="critical-issues">🔴 <strong>Critical Issues</strong></h3>
+<h4 id="cluster-not-starting"><strong>1. Cluster Not Starting</strong></h4>
+<p><strong>Symptoms:</strong> - <code>kubectl get nodes</code> shows no nodes - KIND cluster creation fails - Docker containers not running</p>
+<p><strong>Solutions:</strong></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check Docker status</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps <span class="at">-a</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify Docker daemon</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> info</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check KIND cluster status</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kind</span> get clusters</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Recreate cluster if needed</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kind</span> delete cluster <span class="at">--name</span> tc-enterprise</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ex">kind</span> create cluster <span class="at">--config</span> kind-config.yaml</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify cluster</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> cluster-info</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get nodes</span></code></pre></div>
+<p><strong>Prevention:</strong> - Ensure Docker has sufficient resources (4GB RAM, 2 CPUs) - Check available disk space: <code>df -h</code> - Verify Docker Desktop is running (macOS)</p>
+<h4 id="application-pods-not-starting"><strong>2. Application Pods Not Starting</strong></h4>
+<p><strong>Symptoms:</strong> - Pods stuck in <code>Pending</code> or <code>ContainerCreating</code> state - <code>kubectl get pods</code> shows errors</p>
+<p><strong>Diagnostic Commands:</strong></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check pod status</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-A</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get detailed pod information</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe pod <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check pod logs</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> --previous</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Check events</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get events <span class="at">--sort-by</span><span class="op">=</span>.metadata.creationTimestamp</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Check resource usage</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> top nodes</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> top pods</span></code></pre></div>
+<p><strong>Common Solutions:</strong></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check node resources</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe node</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check persistent volume claims</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pvc <span class="at">-A</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify service accounts</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get serviceaccounts</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Check network policies</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get networkpolicies</span></code></pre></div>
+<h4 id="database-connection-issues"><strong>3. Database Connection Issues</strong></h4>
+<p><strong>Symptoms:</strong> - Applications can’t connect to PostgreSQL - Connection timeout errors - Authentication failures</p>
+<p><strong>Troubleshooting:</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check database pod status</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-l</span> app=postgres <span class="at">-n</span> database</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify database service</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get svc postgres <span class="at">-n</span> database</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Test database connectivity from pod</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="op">&lt;</span>app-pod<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> -- psql <span class="at">-h</span> postgres <span class="at">-U</span> tcuser <span class="at">-d</span> tc_enterprise</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Check database logs</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="at">-l</span> app=postgres <span class="at">-n</span> database <span class="at">--tail</span><span class="op">=</span>100</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify secrets</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get secrets <span class="at">-n</span> database</span></code></pre></div>
+<p><strong>Configuration Fix:</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check database connection string in config</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> ConfigMap</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> app-config</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> enterprise</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span><span class="kw">:</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">DATABASE_URL</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;postgresql://tcuser:password@postgres.database:5432/tc_enterprise&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="networking-issues">🌐 Networking Issues</h2>
+<h3 id="ingress-not-working"><strong>4. Ingress Not Working</strong></h3>
+<p><strong>Symptoms:</strong> - External access fails - 404 or connection refused errors - SSL certificate issues</p>
+<p><strong>Diagnostic Steps:</strong></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check ingress controller</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> ingress-nginx</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify ingress resources</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get ingress <span class="at">-A</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check ingress logs</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="at">-n</span> ingress-nginx deployment/ingress-nginx-controller</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Test internal service connectivity</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="op">&lt;</span>ingress-pod<span class="op">&gt;</span> -n ingress-nginx <span class="at">--</span> curl http://backend-service</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify SSL certificates</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get certificates <span class="at">-A</span></span></code></pre></div>
+<p><strong>Common Fixes:</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Restart ingress controller</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout restart deployment ingress-nginx-controller <span class="at">-n</span> ingress-nginx</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check ingress class</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get ingressclass</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify DNS resolution</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ex">nslookup</span> tc-enterprise.local</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Test Cloudflare tunnel</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="ex">cloudflared</span> tunnel list</span></code></pre></div>
+<h3 id="service-mesh-issues"><strong>5. Service Mesh Issues</strong></h3>
+<p><strong>Symptoms:</strong> - Inter-service communication fails - mTLS certificate errors - Traffic routing problems</p>
+<p><strong>Troubleshooting:</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check Istio components</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> istio-system</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify service entries</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get serviceentries</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check destination rules</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get destinationrules</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Test mTLS</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="op">&lt;</span>pod<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span> -- curl <span class="at">-v</span> https://other-service:443</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Check sidecar injection</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-o</span> jsonpath=<span class="st">&#39;{.items[*].spec.containers[*].name}&#39;</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">&#39; &#39;</span> <span class="st">&#39;\n&#39;</span> <span class="kw">|</span> <span class="fu">grep</span> istio-proxy</span></code></pre></div>
+<hr />
+<h2 id="security-issues">🔒 Security Issues</h2>
+<h3 id="authentication-failures"><strong>6. Authentication Failures</strong></h3>
+<p><strong>Symptoms:</strong> - Login attempts failing - JWT token errors - MFA setup issues</p>
+<p><strong>Diagnostic Commands:</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check authentication service logs</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="at">-l</span> app=auth-service <span class="at">--tail</span><span class="op">=</span>50</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify JWT secrets</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get secrets <span class="at">-l</span> app=auth-service</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Test token validation</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="op">&lt;</span>auth-pod<span class="op">&gt;</span> -- node <span class="at">-e</span> <span class="st">&quot;</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="st">const jwt = require(&#39;jsonwebtoken&#39;);</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="st">const token = process.env.JWT_SECRET;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="st">console.log(&#39;JWT Secret length:&#39;, token.length);</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Check Redis connectivity</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="op">&lt;</span>auth-pod<span class="op">&gt;</span> -- redis-cli ping</span></code></pre></div>
+<p><strong>Solutions:</strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rotate JWT secrets</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> delete secret jwt-secret</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> create secret generic jwt-secret <span class="at">--from-literal</span><span class="op">=</span>secret=<span class="va">$(</span><span class="ex">openssl</span> rand <span class="at">-base64</span> 32<span class="va">)</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Restart authentication service</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout restart deployment auth-service</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Clear Redis cache</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> redis-master <span class="at">--</span> redis-cli FLUSHALL</span></code></pre></div>
+<h3 id="authorization-issues"><strong>7. Authorization Issues</strong></h3>
+<p><strong>Symptoms:</strong> - Access denied errors - RBAC permission failures - Role assignment problems</p>
+<p><strong>Troubleshooting:</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check user roles</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get clusterrolebindings</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get rolebindings <span class="at">-A</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify service account permissions</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> auth can-i list pods <span class="at">--as</span><span class="op">=</span>system:serviceaccount:<span class="op">&lt;</span>namespace<span class="op">&gt;</span>:<span class="op">&lt;</span>serviceaccount<span class="op">&gt;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Check RBAC policies</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get clusterroles</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get roles <span class="at">-A</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Test permission</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> auth can-i create pods <span class="at">--as</span><span class="op">=&lt;</span>user<span class="op">&gt;</span></span></code></pre></div>
+<hr />
+<h2 id="monitoring-issues">📊 Monitoring Issues</h2>
+<h3 id="metrics-not-collecting"><strong>8. Metrics Not Collecting</strong></h3>
+<p><strong>Symptoms:</strong> - Grafana dashboards empty - Prometheus targets down - Alerting not working</p>
+<p><strong>Diagnostic Steps:</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check Prometheus status</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> monitoring</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify service discovery</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> prometheus-0 <span class="at">-n</span> monitoring <span class="at">--</span> wget <span class="at">-qO-</span> http://localhost:9090/api/v1/targets</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check Grafana logs</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="at">-l</span> app=grafana <span class="at">-n</span> monitoring</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Test metrics endpoints</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="op">&lt;</span>app-pod<span class="op">&gt;</span> -- curl http://localhost:8080/metrics</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify alertmanager</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> monitoring <span class="at">-l</span> app=alertmanager</span></code></pre></div>
+<p><strong>Common Fixes:</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Restart monitoring stack</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout restart deployment prometheus <span class="at">-n</span> monitoring</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout restart deployment grafana <span class="at">-n</span> monitoring</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Update service monitors</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> monitoring/service-monitors.yaml</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Check configuration</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get configmaps <span class="at">-n</span> monitoring</span></code></pre></div>
+<h3 id="alerting-not-working"><strong>9. Alerting Not Working</strong></h3>
+<p><strong>Symptoms:</strong> - No alerts received - Email/Slack notifications failing - Alert rules not triggering</p>
+<p><strong>Troubleshooting:</strong></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check alertmanager configuration</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> alertmanager-0 <span class="at">-n</span> monitoring <span class="at">--</span> cat /etc/alertmanager/alertmanager.yml</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify alert rules</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> prometheus-0 <span class="at">-n</span> monitoring <span class="at">--</span> wget <span class="at">-qO-</span> http://localhost:9090/api/v1/rules</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Test alertmanager</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> port-forward alertmanager-0 9093:9093 <span class="at">-n</span> monitoring</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> http://localhost:9093/api/v2/alerts</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Check notification channels</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get secrets <span class="at">-n</span> monitoring <span class="kw">|</span> <span class="fu">grep</span> alertmanager</span></code></pre></div>
+<hr />
+<h2 id="storage-issues">💾 Storage Issues</h2>
+<h3 id="persistent-volume-problems"><strong>10. Persistent Volume Problems</strong></h3>
+<p><strong>Symptoms:</strong> - PVC stuck in <code>Pending</code> - Pod crashes due to storage issues - Data persistence failures</p>
+<p><strong>Diagnostic Commands:</strong></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check PVC status</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pvc <span class="at">-A</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Describe PVC</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe pvc <span class="op">&lt;</span>pvc-name<span class="op">&gt;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check PV status</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pv</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify storage class</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get storageclass</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Check storage provisioner</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> kube-system <span class="kw">|</span> <span class="fu">grep</span> storage</span></code></pre></div>
+<p><strong>Solutions:</strong></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create storage class if missing</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> storage/storage-class.yaml</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Manually create PV</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> storage/persistent-volume.yaml</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check node storage</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe node <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-A</span> 10 <span class="st">&quot;Allocated resources&quot;</span></span></code></pre></div>
+<h3 id="backuprestore-issues"><strong>11. Backup/Restore Issues</strong></h3>
+<p><strong>Symptoms:</strong> - Backup jobs failing - Restore operations failing - Data corruption</p>
+<p><strong>Troubleshooting:</strong></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check backup job status</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get jobs <span class="at">-n</span> backup</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify backup logs</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="at">-l</span> job-name=<span class="op">&lt;</span>backup-job<span class="op">&gt;</span> -n backup</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Test restore process</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> backup/restore-job.yaml</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Check backup storage</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pvc <span class="at">-l</span> app=backup <span class="at">-n</span> backup</span></code></pre></div>
+<hr />
+<h2 id="performance-issues">⚡ Performance Issues</h2>
+<h3 id="high-resource-usage"><strong>12. High Resource Usage</strong></h3>
+<p><strong>Symptoms:</strong> - Pods using excessive CPU/Memory - Node resource exhaustion - Application slowdown</p>
+<p><strong>Diagnostic Steps:</strong></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check resource usage</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> top nodes</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> top pods</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Get pod resource limits</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-o</span> jsonpath=<span class="st">&#39;{.items[*].spec.containers[*].resources}&#39;</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for resource quotas</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get resourcequotas <span class="at">-A</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Monitor specific pod</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="op">&lt;</span>pod<span class="op">&gt;</span> -- top</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for memory leaks</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="op">&lt;</span>pod<span class="op">&gt;</span> -- ps aux <span class="at">--sort</span><span class="op">=</span>-%mem <span class="kw">|</span> <span class="fu">head</span> <span class="at">-10</span></span></code></pre></div>
+<p><strong>Optimization:</strong></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update resource limits</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> k8s/resource-limits.yaml</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Enable vertical pod autoscaling</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> k8s/vpa.yaml</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for bottlenecks</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get hpa <span class="at">-A</span></span></code></pre></div>
+<h3 id="slow-application-response"><strong>13. Slow Application Response</strong></h3>
+<p><strong>Symptoms:</strong> - High latency - Timeout errors - Database query slowness</p>
+<p><strong>Performance Analysis:</strong></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check application logs for slow queries</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="at">-l</span> app=<span class="op">&lt;</span>app-name<span class="op">&gt;</span> --tail=100 <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;slow\|timeout&quot;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Database performance</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> postgres-0 <span class="at">--</span> psql <span class="at">-c</span> <span class="st">&quot;SELECT * FROM pg_stat_activity;&quot;</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Network latency</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> run nettest <span class="at">--image</span><span class="op">=</span>busybox <span class="at">--rm</span> <span class="at">-it</span> <span class="at">--</span> wget <span class="at">-O-</span> http://<span class="op">&lt;</span>service<span class="op">&gt;</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Cache hit rate</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> redis-master <span class="at">--</span> redis-cli info stats</span></code></pre></div>
+<hr />
+<h2 id="deployment-issues">🔄 Deployment Issues</h2>
+<h3 id="rolling-update-failures"><strong>14. Rolling Update Failures</strong></h3>
+<p><strong>Symptoms:</strong> - Deployments stuck - Rollback failures - Pod disruption issues</p>
+<p><strong>Troubleshooting:</strong></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check deployment status</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get deployments <span class="at">-A</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Describe deployment</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe deployment <span class="op">&lt;</span>deployment-name<span class="op">&gt;</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check rollout history</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout history deployment/<span class="op">&lt;</span>deployment-name<span class="op">&gt;</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># View rollout status</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout status deployment/<span class="op">&lt;</span>deployment-name<span class="op">&gt;</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Check pod disruption budget</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pdb <span class="at">-A</span></span></code></pre></div>
+<p><strong>Recovery:</strong></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pause rollout</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout pause deployment/<span class="op">&lt;</span>deployment-name<span class="op">&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rollback to previous version</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout undo deployment/<span class="op">&lt;</span>deployment-name<span class="op">&gt;</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Force rollout</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> rollout restart deployment/<span class="op">&lt;</span>deployment-name<span class="op">&gt;</span></span></code></pre></div>
+<h3 id="helm-chart-issues"><strong>15. Helm Chart Issues</strong></h3>
+<p><strong>Symptoms:</strong> - Helm install/upgrade fails - Chart dependencies missing - Values not applied</p>
+<p><strong>Diagnostic Commands:</strong></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check helm status</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> list <span class="at">-A</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get release information</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> status <span class="op">&lt;</span>release-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check helm history</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> history <span class="op">&lt;</span>release-name<span class="op">&gt;</span> -n <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Validate chart</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> template <span class="op">&lt;</span>chart-name<span class="op">&gt;</span> <span class="op">&lt;</span>repo<span class="op">&gt;</span>/<span class="op">&lt;</span>chart<span class="op">&gt;</span> --values values.yaml</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Check dependencies</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="ex">helm</span> dependency list <span class="op">&lt;</span>chart-directory<span class="op">&gt;</span></span></code></pre></div>
+<hr />
+<h2 id="cloud-integration-issues">☁️ Cloud Integration Issues</h2>
+<h3 id="cloudflare-tunnel-problems"><strong>16. Cloudflare Tunnel Problems</strong></h3>
+<p><strong>Symptoms:</strong> - Tunnel not connecting - DNS propagation issues - Certificate errors</p>
+<p><strong>Troubleshooting:</strong></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check tunnel status</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cloudflared</span> tunnel list</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify tunnel logs</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-f</span> /usr/local/var/log/cloudflared.log</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Test tunnel connectivity</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-v</span> https://tc-enterprise.local</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Check DNS records</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="ex">dig</span> tc-enterprise.local</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Restart tunnel service</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> services restart cloudflared</span></code></pre></div>
+<h3 id="external-service-integration"><strong>17. External Service Integration</strong></h3>
+<p><strong>Symptoms:</strong> - API calls failing - Webhook delivery issues - Third-party service errors</p>
+<p><strong>Diagnostic Steps:</strong></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test external connectivity</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="op">&lt;</span>pod<span class="op">&gt;</span> -- curl <span class="at">-v</span> https://api.external-service.com</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check DNS resolution</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="op">&lt;</span>pod<span class="op">&gt;</span> -- nslookup api.external-service.com</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify certificates</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="op">&lt;</span>pod<span class="op">&gt;</span> -- openssl s_client <span class="at">-connect</span> api.external-service.com:443</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Check network policies</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get networkpolicies <span class="at">-A</span></span></code></pre></div>
+<hr />
+<h2 id="debugging-tools">🐛 Debugging Tools</h2>
+<h3 id="advanced-debugging-techniques"><strong>18. Advanced Debugging Techniques</strong></h3>
+<h4 id="ephemeral-debug-containers"><strong>Ephemeral Debug Containers</strong></h4>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Debug running pod</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> debug <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -it <span class="at">--image</span><span class="op">=</span>busybox <span class="at">--target</span><span class="op">=&lt;</span>container-name<span class="op">&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy files from pod</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> cp <span class="op">&lt;</span>pod-name<span class="op">&gt;</span>:/path/to/file ./local-file</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Execute commands in pod</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -- /bin/bash</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Port forward for local debugging</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> port-forward <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> 8080:8080</span></code></pre></div>
+<h4 id="network-debugging"><strong>Network Debugging</strong></h4>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check network connectivity</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> run netdebug <span class="at">--image</span><span class="op">=</span>busybox <span class="at">--rm</span> <span class="at">-it</span> <span class="at">--</span> nslookup kubernetes.default</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Test service DNS</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> run dnsdebug <span class="at">--image</span><span class="op">=</span>busybox <span class="at">--rm</span> <span class="at">-it</span> <span class="at">--</span> nslookup <span class="op">&lt;</span>service-name<span class="op">&gt;</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check network policies</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> run netpoldebug <span class="at">--image</span><span class="op">=</span>busybox <span class="at">--rm</span> <span class="at">-it</span> <span class="at">--</span> wget <span class="at">-qO-</span> http://<span class="op">&lt;</span>service<span class="op">&gt;</span></span></code></pre></div>
+<h4 id="log-analysis"><strong>Log Analysis</strong></h4>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Stream logs</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="at">-f</span> <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> -c <span class="op">&lt;</span>container-name<span class="op">&gt;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Search logs for patterns</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;ERROR\|WARN&quot;</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Export logs for analysis</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> <span class="op">&gt;</span> pod-logs.txt</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Check previous container logs</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> --previous</span></code></pre></div>
+<h4 id="resource-debugging"><strong>Resource Debugging</strong></h4>
+<div class="sourceCode" id="cb29"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check resource limits</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-o</span> jsonpath=<span class="st">&#39;{.items[*].spec.containers[*].resources}&#39;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Monitor resource usage</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> top pods <span class="at">--containers</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for OOM kills</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-A</span> <span class="kw">|</span> <span class="fu">grep</span> CrashLoopBackOff</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Analyze pod events</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get events <span class="at">--field-selector</span> involvedObject.name=<span class="op">&lt;</span>pod-name<span class="op">&gt;</span></span></code></pre></div>
+<hr />
+<h2 id="automated-troubleshooting">🚀 Automated Troubleshooting</h2>
+<h3 id="health-check-scripts"><strong>19. Health Check Scripts</strong></h3>
+<div class="sourceCode" id="cb30"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"># comprehensive-health-check.sh</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;🔍 TC Enterprise Health Check&quot;</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;================================&quot;</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Cluster status</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;📊 Cluster Status:&quot;</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get nodes</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> cluster-info</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Pod status</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;🐳 Pod Status:&quot;</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-A</span> <span class="at">--no-headers</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;$4 != &quot;Running&quot; {print}&#39;</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Service status</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;🌐 Service Status:&quot;</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get svc <span class="at">-A</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Ingress status</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;🚪 Ingress Status:&quot;</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get ingress <span class="at">-A</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Database connectivity</span></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;🗄️ Database Check:&quot;</span></span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> exec <span class="at">-it</span> <span class="va">$(</span><span class="ex">kubectl</span> get pods <span class="at">-l</span> app=postgres <span class="at">-o</span> jsonpath=<span class="st">&#39;{.items[0].metadata.name}&#39;</span><span class="va">)</span> <span class="at">--</span> psql <span class="at">-U</span> tcuser <span class="at">-d</span> tc_enterprise <span class="at">-c</span> <span class="st">&quot;SELECT version();&quot;</span></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Monitoring status</span></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;📈 Monitoring Status:&quot;</span></span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-n</span> monitoring</span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;✅ Health check complete&quot;</span></span></code></pre></div>
+<h3 id="automated-recovery-scripts"><strong>20. Automated Recovery Scripts</strong></h3>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># auto-recovery.sh</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;🔧 Auto Recovery Started&quot;</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Check cluster health</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="ot">! </span><span class="ex">kubectl</span> cluster-info <span class="op">&amp;&gt;</span>/dev/null<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;❌ Cluster unhealthy, recreating...&quot;</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">kind</span> delete cluster <span class="at">--name</span> tc-enterprise</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">kind</span> create cluster <span class="at">--config</span> kind-config.yaml</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Check critical pods</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a><span class="va">critical_pods</span><span class="op">=</span><span class="va">(</span><span class="st">&quot;postgres&quot;</span> <span class="st">&quot;redis&quot;</span> <span class="st">&quot;ingress-nginx&quot;</span><span class="va">)</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> pod <span class="kw">in</span> <span class="st">&quot;</span><span class="va">${critical_pods</span><span class="op">[@]</span><span class="va">}</span><span class="st">&quot;</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="ot">! </span><span class="ex">kubectl</span> get pods <span class="at">-l</span> app=<span class="va">$pod</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-q</span> Running<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>        <span class="bu">echo</span> <span class="st">&quot;❌ </span><span class="va">$pod</span><span class="st"> unhealthy, restarting...&quot;</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>        <span class="ex">kubectl</span> rollout restart deployment <span class="va">$pod</span></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">fi</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Check ingress</span></span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="ot">! </span><span class="ex">kubectl</span> get ingress <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-q</span> tc-enterprise<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;❌ Ingress missing, redeploying...&quot;</span></span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>    <span class="ex">kubectl</span> apply <span class="at">-f</span> k8s/ingress.yaml</span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;✅ Auto recovery complete&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="support-escalation">📞 Support &amp; Escalation</h2>
+<h3 id="support-resources"><strong>21. Support Resources</strong></h3>
+<h4 id="internal-support"><strong>Internal Support</strong></h4>
+<ul>
+<li><strong>Documentation</strong>: Check this troubleshooting guide first</li>
+<li><strong>Logs</strong>: Always collect relevant logs before escalating</li>
+<li><strong>Metrics</strong>: Include monitoring data when reporting issues</li>
+<li><strong>Environment</strong>: Note your OS, Docker version, Kubernetes version</li>
+</ul>
+<h4 id="external-resources"><strong>External Resources</strong></h4>
+<ul>
+<li><strong>Kubernetes Issues</strong>: <a href="https://github.com/kubernetes/kubernetes/issues">GitHub Issues</a></li>
+<li><strong>Docker Issues</strong>: <a href="https://forums.docker.com/">Docker Forums</a></li>
+<li><strong>Cloudflare Issues</strong>: <a href="https://www.cloudflarestatus.com/">Cloudflare Status</a></li>
+<li><strong>PostgreSQL Issues</strong>: <a href="https://www.postgresql.org/list/">PostgreSQL Mailing Lists</a></li>
+</ul>
+<h4 id="community-support"><strong>Community Support</strong></h4>
+<ul>
+<li><strong>Stack Overflow</strong>: Tag with <code>kubernetes</code>, <code>docker</code>, <code>postgresql</code></li>
+<li><strong>Reddit</strong>: r/kubernetes, r/docker, r/PostgreSQL</li>
+<li><strong>DevOps Forums</strong>: Various DevOps communities</li>
+</ul>
+<h3 id="issue-reporting-template"><strong>22. Issue Reporting Template</strong></h3>
+<div class="sourceCode" id="cb32"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Issue Report Template</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>**Issue Summary:**</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Brief description of the problem</span><span class="co">]</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>**Environment:**</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>OS: <span class="co">[</span><span class="ot">macOS version</span><span class="co">]</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Docker: <span class="co">[</span><span class="ot">version</span><span class="co">]</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Kubernetes: <span class="co">[</span><span class="ot">version</span><span class="co">]</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>TC Enterprise: <span class="co">[</span><span class="ot">version/tag</span><span class="co">]</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>**Symptoms:**</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Detailed description of what&#39;s happening</span><span class="co">]</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>**Steps to Reproduce:**</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span><span class="co">[</span><span class="ot">Step 1</span><span class="co">]</span></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span><span class="co">[</span><span class="ot">Step 2</span><span class="co">]</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span><span class="co">[</span><span class="ot">Step 3</span><span class="co">]</span></span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>**Expected Behavior:**</span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">What should happen</span><span class="co">]</span></span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>**Actual Behavior:**</span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">What actually happens</span><span class="co">]</span></span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>**Logs:**</span></code></pre></div>
+<p>[Paste relevant logs here]</p>
+<pre><code>
+**Diagnostic Output:**</code></pre>
+<p>[Paste kubectl describe, logs, etc.]</p>
+<pre><code>
+**Recent Changes:**
+[Any recent deployments, configuration changes, etc.]
+
+**Severity:**
+- [ ] Critical (system down)
+- [ ] High (major functionality broken)
+- [ ] Medium (minor functionality broken)
+- [ ] Low (cosmetic issue)</code></pre>
+<hr />
+<h2 id="additional-resources">📚 Additional Resources</h2>
+<h3 id="troubleshooting-links">🔗 <strong>Troubleshooting Links</strong></h3>
+<ul>
+<li><strong><a href="https://kubernetes.io/docs/tasks/debug/">Kubernetes Troubleshooting</a></strong></li>
+<li><strong><a href="https://docs.docker.com/config/daemon/troubleshoot/">Docker Troubleshooting</a></strong></li>
+<li><strong><a href="https://www.postgresql.org/docs/current/monitoring.html">PostgreSQL Troubleshooting</a></strong></li>
+<li><strong><a href="https://developers.cloudflare.com/fundamentals/get-started/basic-tasks/troubleshoot/">Cloudflare Debugging</a></strong></li>
+</ul>
+<h3 id="useful-tools">🛠️ <strong>Useful Tools</strong></h3>
+<ul>
+<li><strong>kubectl-debug</strong>: Advanced debugging for Kubernetes</li>
+<li><strong>stern</strong>: Multi-pod log tailing</li>
+<li><strong>k9s</strong>: Terminal UI for Kubernetes</li>
+<li><strong>lens</strong>: Kubernetes IDE</li>
+<li><strong>octant</strong>: Web-based Kubernetes dashboard</li>
+</ul>
+<hr />
+<p><em>© 2025 TC Enterprise DevOps Platform™ - Comprehensive Troubleshooting Guide</em></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+
+        // Add copy buttons to code blocks
+        document.querySelectorAll('pre').forEach(pre => {
+            const button = document.createElement('button');
+            button.className = 'btn btn-sm btn-outline-primary copy-btn';
+            button.innerHTML = '<i class="fas fa-copy"></i>';
+            button.style.position = 'absolute';
+            button.style.top = '10px';
+            button.style.right = '10px';
+            pre.style.position = 'relative';
+            pre.appendChild(button);
+            button.addEventListener('click', () => {
+                const code = pre.querySelector('code') ? pre.querySelector('code').textContent : pre.textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    button.innerHTML = '<i class="fas fa-check"></i>';
+                    setTimeout(() => button.innerHTML = '<i class="fas fa-copy"></i>', 2000);
+                });
+            });
+        });
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const icon = darkModeToggle.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                darkModeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
+        }
+
+        // Reading progress
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.body.offsetHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('progressBar').style.width = scrollPercent + '%';
+        });
+
+        // Back to top
+        const backToTopBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.style.display = 'block';
+            } else {
+                backToTopBtn.style.display = 'none';
+            }
+        });
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            let found = false;
+            headings.forEach(h => {
+                if (!found && h.textContent.toLowerCase().includes(query)) {
+                    h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    found = true;
+                }
+            });
+        });
+
+        // Get current page number from filename
+        const currentPath = window.location.pathname;
+        const fileName = currentPath.split('/').pop();
+
+        const pageFiles = [
+            '01-executive-summary.html',
+            '02-architecture-overview.html',
+            '03-quick-start-guide.html',
+            '04-automated-deployment.html',
+            '05-container-kubernetes.html',
+            '06-networking-ingress.html',
+            '07-monitoring-observability.html',
+            '08-enterprise-applications.html',
+            '09-security-compliance.html',
+            '10-cloudflare-integration.html',
+            '10-troubleshooting-guide.html',
+            '11-performance-optimization.html',
+            '11-troubleshooting-guide.html',
+            '12-ci-cd-pipeline.html',
+            '13-contributing-development.html',
+            'ABOUT.html',
+            'ADVANCED-TOOLS-INTEGRATION-REPORT.html',
+            'APPLE-SILICON-INTEGRATION.html',
+            'BOOK.html',
+            'CLOUDFLARE-DNS-CLI-SETUP.html',
+            'CONSOLIDATION-COMPLETE.html',
+            'ENHANCEMENT-DOCUMENTATION.html',
+            'GHCR-SETUP-GUIDE.html',
+            'INDEX.html',
+            'KUBERNETES-TROUBLESHOOTING.html',
+            'MAC-MINI-QUICKSTART.html',
+            'README.html',
+            'SCRIPT-SECURITY-AUDIT.html',
+            'SECURITY-SETUP-GUIDE.html'
+        ];
+
+        const pageTitles = pageFiles.map(file => file.replace('.html', '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
+
+        let currentPage = pageFiles.indexOf(fileName) + 1;
+        if (currentPage === 0) currentPage = 1; // for index.html or others
+
+        const totalPages = pageFiles.length;
+
+        // Generate pagination
+        const pagination = document.getElementById('pagination');
+        for (let i = 1; i <= totalPages; i++) {
+            const li = document.createElement('li');
+            li.className = 'page-item' + (i === currentPage ? ' active' : '');
+            const a = document.createElement('a');
+            a.className = 'page-link';
+            a.href = pageFiles[i - 1];
+            a.textContent = i;
+            li.appendChild(a);
+            pagination.appendChild(li);
+        }
+
+        // Update dropdown
+        const dropdown = document.querySelector('.dropdown-menu');
+        dropdown.innerHTML = '';
+        pageFiles.forEach((file, index) => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.className = 'dropdown-item';
+            a.href = file;
+            a.textContent = `${index + 1}. ${pageTitles[index]}`;
+            li.appendChild(a);
+            dropdown.appendChild(li);
+        });
+
+        // Prev/Next buttons
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        if (currentPage > 1) {
+            prevBtn.onclick = () => window.location.href = pageFiles[currentPage - 2];
+        } else {
+            prevBtn.disabled = true;
+        }
+
+        if (currentPage < totalPages) {
+            nextBtn.onclick = () => window.location.href = pageFiles[currentPage];
+        } else {
+            nextBtn.disabled = true;
+        }
+    </script>
+</body>
+
+</html>
+<button id="backToTop" class="btn btn-primary" style="position: fixed; bottom: 20px; right: 20px; display: none; z-index: 1001;"><i class="fas fa-arrow-up"></i></button>

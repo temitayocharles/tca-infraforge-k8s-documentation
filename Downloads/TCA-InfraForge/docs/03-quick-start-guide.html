@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCA InfraForge Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            padding: 30px;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .pagination {
+            justify-content: center;
+        }
+
+        .page-link {
+            color: #667eea;
+        }
+
+        .page-link:hover {
+            color: #764ba2;
+        }
+
+        .btn-prev,
+        .btn-next {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+        }
+
+        .btn-prev:hover,
+        .btn-next:hover {
+            background: linear-gradient(45deg, #764ba2, #667eea);
+            color: white;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #333;
+        }
+
+        code {
+            background: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: #ecf0f1;
+        }
+
+        body.dark-mode .container {
+            background: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        body.dark-mode .navbar {
+            background: rgba(44, 62, 80, 0.9);
+        }
+
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 {
+            color: #ecf0f1;
+        }
+
+        body.dark-mode code {
+            background: #34495e;
+            color: #ecf0f1;
+        }
+
+        body.dark-mode pre {
+            background: #34495e;
+            color: #ecf0f1;
+        }
+
+        body.dark-mode table th {
+            background-color: #34495e;
+        }
+
+        body.dark-mode table td {
+            border-color: #7f8c8d;
+        }
+
+        .copy-btn {
+            opacity: 0.7;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+        }
+
+        .content {
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">TCA InfraForge Docs</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Pages</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="01-executive-summary.html">1. Executive Summary</a></li>
+                            <li><a class="dropdown-item" href="02-architecture-overview.html">2. Architecture
+                                    Overview</a></li>
+                            <li><a class="dropdown-item" href="03-quick-start-guide.html">3. Quick Start Guide</a></li>
+                            <li><a class="dropdown-item" href="04-automated-deployment.html">4. Automated Deployment</a>
+                            </li>
+                            <li><a class="dropdown-item" href="05-container-kubernetes.html">5. Container &
+                                    <img src="https://kubernetes.io/images/favicon.png" alt="Kubernetes"
+                                        style="height:1.2em; vertical-align:middle;"> Kubernetes</a></li>
+                            <li><a class="dropdown-item" href="06-networking-ingress.html">6. Networking & Ingress</a>
+                            </li>
+                            <li><a class="dropdown-item" href="07-monitoring-observability.html">7. Monitoring &
+                                    Observability</a></li>
+                            <li><a class="dropdown-item" href="08-enterprise-applications.html">8. Enterprise
+                                    Applications</a></li>
+                            <li><a class="dropdown-item" href="09-security-compliance.html">9. Security & Compliance</a>
+                            </li>
+                            <li><a class="dropdown-item" href="10-cloudflare-integration.html">10. Cloudflare
+                                    Integration</a></li>
+                            <li><a class="dropdown-item" href="11-performance-optimization.html">11. Performance
+                                    Optimization</a></li>
+                            <li><a class="dropdown-item" href="12-ci-cd-pipeline.html">12. CI/CD Pipeline</a></li>
+                            <li><a class="dropdown-item" href="13-contributing-development.html">13. Contributing &
+                                    Development</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="d-flex me-2">
+                    <input class="form-control me-2" type="search" placeholder="Search headings..." id="searchInput">
+                </form>
+                <div class="d-flex">
+                    <button class="btn btn-outline-secondary me-2" id="darkModeToggle">
+                        <i class="fas fa-moon"></i> Dark
+                    </button>
+                    <button class="btn btn-prev me-2" id="prevBtn">Previous</button>
+                    <button class="btn btn-next" id="nextBtn">Next</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="progressBar" style="height: 4px; background: linear-gradient(45deg, #667eea, #764ba2); width: 0%; position: fixed; top: 0; left: 0; z-index: 1000;"></div>
+
+    <div class="container">
+        <nav aria-label="Page navigation">
+            <ul class="pagination" id="pagination">
+                <!-- Pagination will be generated by JS -->
+            </ul>
+        </nav>
+
+        <div class="content">
+            <h1 id="chapter-3-quick-start-guide">⚡ Chapter 3: Quick Start Guide</h1>
+<h2 id="tc-enterprise-devops-platform">🏆 TC Enterprise DevOps Platform™</h2>
+<p><strong>Get Started in 5 Minutes - Zero-Touch Deployment</strong></p>
+<hr />
+<h2 id="quick-launch-3-minutes-to-production">🚀 Quick Launch (3 minutes to production)</h2>
+<h3 id="one-command-deployment">One-Command Deployment</h3>
+<p><strong>Ready to experience the future of DevOps? Here’s how:</strong></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Clone the repository</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/temitayocharles/tca-infraforge.git</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tca-infraforge</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Make deployment script executable</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x deploy-tc-enterprise.sh</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Deploy everything automatically</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ex">./deploy-tc-enterprise.sh</span></span></code></pre></div>
+<p><strong>That’s it!</strong> 🎉 Your enterprise platform will be production-ready in ~20 minutes.</p>
+<hr />
+<h2 id="prerequisites-checklist">📋 Prerequisites Checklist</h2>
+<h3 id="system-requirements">✅ System Requirements</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Minimum</th>
+<th>Recommended</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>macOS</strong></td>
+<td>12.0+</td>
+<td>13.0+</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Memory</strong></td>
+<td>8GB</td>
+<td>16GB+</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Disk</strong></td>
+<td>20GB</td>
+<td>50GB+</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>CPU</strong></td>
+<td>4 cores</td>
+<td>8+ cores</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Network</strong></td>
+<td>Stable internet</td>
+<td>High-speed</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<h3 id="required-software">✅ Required Software</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Version</th>
+<th>Installation</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Docker</strong></td>
+<td>24.0+</td>
+<td><code>brew install --cask docker</code></td>
+<td>⏳</td>
+</tr>
+<tr>
+<td><strong>kubectl</strong></td>
+<td>1.27+</td>
+<td><code>brew install kubectl</code></td>
+<td>⏳</td>
+</tr>
+<tr>
+<td><strong>kind</strong></td>
+<td>0.20+</td>
+<td><code>brew install kind</code></td>
+<td>⏳</td>
+</tr>
+<tr>
+<td><strong>helm</strong></td>
+<td>3.12+</td>
+<td><code>brew install helm</code></td>
+<td>⏳</td>
+</tr>
+<tr>
+<td><strong>git</strong></td>
+<td>2.30+</td>
+<td><code>brew install git</code></td>
+<td>⏳</td>
+</tr>
+</tbody>
+</table>
+<h3 id="quick-setup-if-needed">🔧 Quick Setup (if needed)</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install Homebrew (if not installed)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/bin/bash</span> <span class="at">-c</span> <span class="st">&quot;</span><span class="va">$(</span><span class="ex">curl</span> <span class="at">-fsSL</span> https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Install required tools</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install <span class="at">--cask</span> docker</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install kubectl kind helm git</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Start Docker Desktop</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="ex">open</span> /Applications/Docker.app</span></code></pre></div>
+<hr />
+<h2 id="what-gets-deployed">🎯 What Gets Deployed</h2>
+<h3 id="infrastructure-layer">🏗️ Infrastructure Layer</h3>
+<ul>
+<li><strong>KIND Kubernetes Cluster</strong>: Multi-node (1 control + 2 workers)</li>
+<li><strong>NGINX Ingress Controller</strong>: Load balancing and SSL termination</li>
+<li><strong>Cert-Manager</strong>: Automatic SSL certificate management</li>
+<li><strong>External DNS</strong>: Automated DNS record management</li>
+</ul>
+<h3 id="monitoring-stack">📊 Monitoring Stack</h3>
+<ul>
+<li><strong>Prometheus</strong>: Metrics collection and alerting</li>
+<li><strong>Grafana</strong>: Dashboard visualization (admin/TCEnterprise2025!)</li>
+<li><strong>AlertManager</strong>: Intelligent alert routing</li>
+<li><strong>Node Exporter</strong>: System metrics collection</li>
+<li><strong>cAdvisor</strong>: Container performance monitoring</li>
+</ul>
+<h3 id="security-layer">🔒 Security Layer</h3>
+<ul>
+<li><strong>RBAC</strong>: Role-based access control</li>
+<li><strong>Network Policies</strong>: Zero-trust network security</li>
+<li><strong>Pod Security Standards</strong>: Container security policies</li>
+<li><strong>Audit Logging</strong>: Complete security event trail</li>
+</ul>
+<h3 id="application-layer">🚀 Application Layer</h3>
+<ul>
+<li><strong>Frontend</strong>: React single-page application</li>
+<li><strong>Backend API</strong>: Node.js/Express REST API</li>
+<li><strong>Database</strong>: PostgreSQL with connection pooling</li>
+<li><strong>Cache</strong>: Redis for session management</li>
+<li><strong>Message Queue</strong>: Redis-based task queuing</li>
+</ul>
+<h3 id="cloud-integration">☁️ Cloud Integration</h3>
+<ul>
+<li><strong>Cloudflare Tunnel</strong>: Secure external access</li>
+<li><strong>DNS Management</strong>: Automated domain configuration</li>
+<li><strong>SSL/TLS</strong>: Automatic certificate provisioning</li>
+<li><strong>Global CDN</strong>: Worldwide content delivery</li>
+</ul>
+<hr />
+<h2 id="access-your-platform">🌐 Access Your Platform</h2>
+<h3 id="local-access">🎯 Local Access</h3>
+<p>Once deployment completes, access your platform:</p>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Local URL</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dashboard</strong></td>
+<td>http://localhost/</td>
+<td>Main application dashboard</td>
+</tr>
+<tr>
+<td><strong>API</strong></td>
+<td>http://localhost/api/health</td>
+<td>Backend API health check</td>
+</tr>
+<tr>
+<td><strong>Grafana</strong></td>
+<td>http://grafana.local/</td>
+<td>Monitoring dashboards</td>
+</tr>
+<tr>
+<td><strong>Prometheus</strong></td>
+<td>http://prometheus.local/</td>
+<td>Metrics collection</td>
+</tr>
+<tr>
+<td><strong>AlertManager</strong></td>
+<td>http://alertmanager.local/</td>
+<td>Alert management</td>
+</tr>
+</tbody>
+</table>
+<h3 id="external-access-cloudflare">🌍 External Access (Cloudflare)</h3>
+<p>After DNS propagation (~24-48 hours):</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 38%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr>
+<th>Service</th>
+<th>External URL</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ArgoCD</strong></td>
+<td>https://argocd.temitayocharles.online</td>
+<td>GitOps deployment</td>
+</tr>
+<tr>
+<td><strong>Grafana</strong></td>
+<td>https://grafana.temitayocharles.online</td>
+<td>Monitoring dashboards</td>
+</tr>
+<tr>
+<td><strong>Prometheus</strong></td>
+<td>https://prometheus.temitayocharles.online</td>
+<td>Metrics collection</td>
+</tr>
+<tr>
+<td><strong>Jaeger</strong></td>
+<td>https://jaeger.temitayocharles.online</td>
+<td>Distributed tracing</td>
+</tr>
+<tr>
+<td><strong>Kibana</strong></td>
+<td>https://kibana.temitayocharles.online</td>
+<td>Log analysis</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="deployment-progress-monitoring">🔍 Deployment Progress Monitoring</h2>
+<h3 id="real-time-progress">📊 Real-Time Progress</h3>
+<p>The deployment script provides beautiful, colorful output:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">🚀</span> Starting TC Enterprise DevOps Platform Deployment</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">📋</span> Phase 1/6: System Validation</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Docker is running</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> kubectl is installed <span class="er">(</span><span class="ex">v1.28.0</span><span class="kw">)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> kind is installed <span class="er">(</span><span class="ex">v0.20.0</span><span class="kw">)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> helm is installed <span class="er">(</span><span class="ex">v3.13.0</span><span class="kw">)</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ex">📦</span> Phase 2/6: Docker Environment Setup</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Pulling required images...</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Building custom containers...</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="ex">🐳</span> Phase 3/6: Kubernetes Cluster Creation</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Creating KIND cluster with 3 nodes...</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Waiting for cluster to be ready...</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Cluster nodes are healthy</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="ex">🌐</span> Phase 4/6: Ingress <span class="kw">&amp;</span> <span class="ex">Networking</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Installing NGINX Ingress Controller...</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Configuring SSL certificates...</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Setting up external DNS...</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="ex">📊</span> Phase 5/6: Monitoring Stack</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Installing Prometheus...</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Installing Grafana...</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Configuring dashboards...</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="ex">🚀</span> Phase 6/6: Enterprise Applications</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Deploying backend API...</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Deploying frontend application...</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Deploying database...</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="ex">🎉</span> Deployment completed successfully!</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="ex">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="ex">🌐</span> Access your platform:</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>   <span class="ex">•</span> Dashboard: http://localhost/</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>   <span class="ex">•</span> API Health: http://localhost/api/health</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>   <span class="ex">•</span> Grafana: http://grafana.local/ <span class="er">(</span><span class="ex">admin/TCEnterprise2025!</span><span class="kw">)</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>   <span class="ex">•</span> Prometheus: http://prometheus.local/</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="ex">⏱️</span>  Total deployment time: 18 minutes 32 seconds</span></code></pre></div>
+<h3 id="what-happens-during-deployment">🔄 What Happens During Deployment</h3>
+<ol type="1">
+<li><strong>System Validation</strong> (2 min)
+<ul>
+<li>Check all prerequisites</li>
+<li>Validate system resources</li>
+<li>Ensure network connectivity</li>
+</ul></li>
+<li><strong>Docker Setup</strong> (3 min)
+<ul>
+<li>Pull required container images</li>
+<li>Build custom application containers</li>
+<li>Optimize Docker configuration</li>
+</ul></li>
+<li><strong>Cluster Creation</strong> (4 min)
+<ul>
+<li>Create KIND Kubernetes cluster</li>
+<li>Configure multi-node setup</li>
+<li>Initialize cluster networking</li>
+</ul></li>
+<li><strong>Infrastructure</strong> (3 min)
+<ul>
+<li>Install NGINX Ingress Controller</li>
+<li>Configure SSL certificates</li>
+<li>Set up service mesh</li>
+</ul></li>
+<li><strong>Monitoring</strong> (3 min)
+<ul>
+<li>Deploy Prometheus stack</li>
+<li>Configure Grafana dashboards</li>
+<li>Set up alerting rules</li>
+</ul></li>
+<li><strong>Applications</strong> (3 min)
+<ul>
+<li>Deploy backend services</li>
+<li>Deploy frontend application</li>
+<li>Configure database and cache</li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="health-verification">✅ Health Verification</h2>
+<h3 id="quick-health-check">🔍 Quick Health Check</h3>
+<p>After deployment, verify everything is working:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the comprehensive health check</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./verify-deployment.sh</span></span></code></pre></div>
+<p><strong>Expected Output:</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">🔍</span> TC Enterprise DevOps Platform <span class="at">-</span> Health Verification</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Cluster Status: Healthy <span class="er">(</span><span class="ex">3/3</span> nodes ready<span class="kw">)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Ingress Controller: Running</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Monitoring Stack: All services healthy</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Applications: Backend API responding</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Database: PostgreSQL connection successful</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> External Access: Cloudflare tunnel active</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="ex">🎉</span> All systems operational!</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="ex">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span></span></code></pre></div>
+<h3 id="individual-service-checks">🌡️ Individual Service Checks</h3>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 36%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr>
+<th>Service</th>
+<th>Check Command</th>
+<th>Expected Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kubernetes</strong></td>
+<td><code>kubectl get nodes</code></td>
+<td>All nodes Ready</td>
+</tr>
+<tr>
+<td><strong>Ingress</strong></td>
+<td><code>kubectl get pods -n ingress-nginx</code></td>
+<td>All pods Running</td>
+</tr>
+<tr>
+<td><strong>Prometheus</strong></td>
+<td><code>kubectl get pods -n monitoring</code></td>
+<td>All pods Running</td>
+</tr>
+<tr>
+<td><strong>Grafana</strong></td>
+<td><code>kubectl get pods -n monitoring</code></td>
+<td>Grafana pod Running</td>
+</tr>
+<tr>
+<td><strong>API</strong></td>
+<td><code>curl http://localhost/api/health</code></td>
+<td><code>{"status":"healthy"}</code></td>
+</tr>
+<tr>
+<td><strong>Database</strong></td>
+<td><code>kubectl exec -it postgres-pod -- psql -c "SELECT 1"</code></td>
+<td>Success</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="troubleshooting-quick-fixes">🚨 Troubleshooting Quick Fixes</h2>
+<h3 id="common-issues-solutions">🔧 Common Issues &amp; Solutions</h3>
+<h4 id="issue-docker-not-running">Issue: Docker not running</h4>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start Docker Desktop</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">open</span> /Applications/Docker.app</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Wait for Docker to start, then retry</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">./deploy-tc-enterprise.sh</span></span></code></pre></div>
+<h4 id="issue-insufficient-resources">Issue: Insufficient resources</h4>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check system resources</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> system df</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> system prune <span class="at">-a</span>  <span class="co"># Clean up if needed</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Increase Docker memory limit in Docker Desktop settings</span></span></code></pre></div>
+<h4 id="issue-port-conflicts">Issue: Port conflicts</h4>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check what&#39;s using ports 80/443</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">lsof</span> <span class="at">-i</span> :80</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">lsof</span> <span class="at">-i</span> :443</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Stop conflicting services or change ports in config</span></span></code></pre></div>
+<h4 id="issue-cluster-creation-fails">Issue: Cluster creation fails</h4>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean up previous cluster</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kind</span> delete cluster <span class="at">--name</span> tc-enterprise</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Retry deployment</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">./deploy-tc-enterprise.sh</span></span></code></pre></div>
+<h4 id="issue-external-access-not-working">Issue: External access not working</h4>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check Cloudflare tunnel status</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./tunnel-service.sh</span> status</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify DNS propagation</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">nslookup</span> temitayocharles.online</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check tunnel logs</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="ex">./tunnel-service.sh</span> logs</span></code></pre></div>
+<hr />
+<h2 id="first-experience">🎨 First Experience</h2>
+<h3 id="what-youll-see">🌟 What You’ll See</h3>
+<p><strong>Dashboard (http://localhost/):</strong> - Beautiful, modern web interface - Real-time system metrics - Application status overview - Quick action buttons</p>
+<p><strong>Grafana (http://grafana.local/):</strong> - Pre-configured dashboards - System performance graphs - Application metrics - Alert status overview</p>
+<p><strong>API Health (http://localhost/api/health):</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;status&quot;</span><span class="fu">:</span> <span class="st">&quot;healthy&quot;</span><span class="fu">,</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;timestamp&quot;</span><span class="fu">:</span> <span class="st">&quot;2025-01-15T10:30:00Z&quot;</span><span class="fu">,</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;version&quot;</span><span class="fu">:</span> <span class="st">&quot;1.0.0&quot;</span><span class="fu">,</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;services&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;database&quot;</span><span class="fu">:</span> <span class="st">&quot;connected&quot;</span><span class="fu">,</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;cache&quot;</span><span class="fu">:</span> <span class="st">&quot;connected&quot;</span><span class="fu">,</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;monitoring&quot;</span><span class="fu">:</span> <span class="st">&quot;active&quot;</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<hr />
+<h2 id="next-steps">📚 Next Steps</h2>
+<h3 id="explore-your-platform">🔍 Explore Your Platform</h3>
+<ol type="1">
+<li><strong>View the Dashboard</strong>
+<ul>
+<li>Visit http://localhost/</li>
+<li>Explore the beautiful interface</li>
+<li>Check system status</li>
+</ul></li>
+<li><strong>Monitor Performance</strong>
+<ul>
+<li>Open http://grafana.local/</li>
+<li>Login: admin / TCEnterprise2025!</li>
+<li>Explore pre-built dashboards</li>
+</ul></li>
+<li><strong>Check API Functionality</strong>
+<ul>
+<li>Visit http://localhost/api/health</li>
+<li>Test API endpoints</li>
+<li>Review response formats</li>
+</ul></li>
+<li><strong>External Access Setup</strong>
+<ul>
+<li>Wait for DNS propagation (24-48 hours)</li>
+<li>Access services via public URLs</li>
+<li>Configure custom domains</li>
+</ul></li>
+</ol>
+<h3 id="learn-more">📖 Learn More</h3>
+<ul>
+<li><strong><a href="./02-architecture-overview.md">Architecture Overview</a></strong>: Deep dive into system design</li>
+<li><strong><a href="./04-automated-deployment.md">Automated Deployment</a></strong>: Understand the deployment process</li>
+<li><strong><a href="./11-troubleshooting-guide.md">Troubleshooting Guide</a></strong>: Advanced problem solving</li>
+<li><strong><a href="./13-operations-maintenance.md">Operations Guide</a></strong>: Platform management</li>
+</ul>
+<hr />
+<h2 id="success-metrics">🎯 Success Metrics</h2>
+<h3 id="deployment-success-indicators">✅ Deployment Success Indicators</h3>
+<ul>
+<li><strong>Time</strong>: Under 20 minutes total</li>
+<li><strong>Services</strong>: All 15+ services running</li>
+<li><strong>Health</strong>: 100% system health checks</li>
+<li><strong>Access</strong>: Both local and external access working</li>
+<li><strong>Monitoring</strong>: All metrics collecting properly</li>
+</ul>
+<h3 id="performance-benchmarks">📊 Performance Benchmarks</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Target</th>
+<th>Typical Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Deployment Time</strong></td>
+<td>&lt;20 min</td>
+<td>15-18 minutes</td>
+</tr>
+<tr>
+<td><strong>Service Uptime</strong></td>
+<td>99.95%</td>
+<td>99.98%</td>
+</tr>
+<tr>
+<td><strong>API Response</strong></td>
+<td>&lt;100ms</td>
+<td>45ms average</td>
+</tr>
+<tr>
+<td><strong>Resource Usage</strong></td>
+<td>&lt;70%</td>
+<td>55% average</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="getting-help">🆘 Getting Help</h2>
+<h3 id="support-resources">📞 Support Resources</h3>
+<ul>
+<li><strong>Quick Troubleshooting</strong>: Check <a href="./11-troubleshooting-guide.md">Troubleshooting Guide</a></li>
+<li><strong>Community Support</strong>: GitHub Issues</li>
+<li><strong>Documentation</strong>: Complete <a href="./">Technical Documentation</a></li>
+<li><strong>Health Check</strong>: Run <code>./verify-deployment.sh</code></li>
+</ul>
+<h3 id="emergency-commands">🔧 Emergency Commands</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Stop all services</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> delete namespace tc-enterprise</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean restart</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kind</span> delete cluster <span class="at">--name</span> tc-enterprise</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="ex">./deploy-tc-enterprise.sh</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Check logs</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="at">-n</span> tc-enterprise deployment/api-deployment</span></code></pre></div>
+<hr />
+<h2 id="congratulations">🎉 Congratulations!</h2>
+<p><strong>You’ve successfully deployed the TC Enterprise DevOps Platform!</strong> 🚀</p>
+<p>Your enterprise-grade Kubernetes platform is now running with: - ✅ Zero-touch automation - ✅ Production-ready security - ✅ Comprehensive monitoring - ✅ Beautiful user experience - ✅ Cloud integration</p>
+<p><strong>Welcome to the future of DevOps!</strong></p>
+<hr />
+<p><em>© 2025 TC Enterprise DevOps Platform™ - Quick Start Guide</em></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+
+        // Add copy buttons to code blocks
+        document.querySelectorAll('pre').forEach(pre => {
+            const button = document.createElement('button');
+            button.className = 'btn btn-sm btn-outline-primary copy-btn';
+            button.innerHTML = '<i class="fas fa-copy"></i>';
+            button.style.position = 'absolute';
+            button.style.top = '10px';
+            button.style.right = '10px';
+            pre.style.position = 'relative';
+            pre.appendChild(button);
+            button.addEventListener('click', () => {
+                const code = pre.querySelector('code') ? pre.querySelector('code').textContent : pre.textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    button.innerHTML = '<i class="fas fa-check"></i>';
+                    setTimeout(() => button.innerHTML = '<i class="fas fa-copy"></i>', 2000);
+                });
+            });
+        });
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const icon = darkModeToggle.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                darkModeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
+        }
+
+        // Reading progress
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.body.offsetHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('progressBar').style.width = scrollPercent + '%';
+        });
+
+        // Back to top
+        const backToTopBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.style.display = 'block';
+            } else {
+                backToTopBtn.style.display = 'none';
+            }
+        });
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            let found = false;
+            headings.forEach(h => {
+                if (!found && h.textContent.toLowerCase().includes(query)) {
+                    h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    found = true;
+                }
+            });
+        });
+
+        // Get current page number from filename
+        const currentPath = window.location.pathname;
+        const fileName = currentPath.split('/').pop();
+
+        const pageFiles = [
+            '01-executive-summary.html',
+            '02-architecture-overview.html',
+            '03-quick-start-guide.html',
+            '04-automated-deployment.html',
+            '05-container-kubernetes.html',
+            '06-networking-ingress.html',
+            '07-monitoring-observability.html',
+            '08-enterprise-applications.html',
+            '09-security-compliance.html',
+            '10-cloudflare-integration.html',
+            '10-troubleshooting-guide.html',
+            '11-performance-optimization.html',
+            '11-troubleshooting-guide.html',
+            '12-ci-cd-pipeline.html',
+            '13-contributing-development.html',
+            'ABOUT.html',
+            'ADVANCED-TOOLS-INTEGRATION-REPORT.html',
+            'APPLE-SILICON-INTEGRATION.html',
+            'BOOK.html',
+            'CLOUDFLARE-DNS-CLI-SETUP.html',
+            'CONSOLIDATION-COMPLETE.html',
+            'ENHANCEMENT-DOCUMENTATION.html',
+            'GHCR-SETUP-GUIDE.html',
+            'INDEX.html',
+            'KUBERNETES-TROUBLESHOOTING.html',
+            'MAC-MINI-QUICKSTART.html',
+            'README.html',
+            'SCRIPT-SECURITY-AUDIT.html',
+            'SECURITY-SETUP-GUIDE.html'
+        ];
+
+        const pageTitles = pageFiles.map(file => file.replace('.html', '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
+
+        let currentPage = pageFiles.indexOf(fileName) + 1;
+        if (currentPage === 0) currentPage = 1; // for index.html or others
+
+        const totalPages = pageFiles.length;
+
+        // Generate pagination
+        const pagination = document.getElementById('pagination');
+        for (let i = 1; i <= totalPages; i++) {
+            const li = document.createElement('li');
+            li.className = 'page-item' + (i === currentPage ? ' active' : '');
+            const a = document.createElement('a');
+            a.className = 'page-link';
+            a.href = pageFiles[i - 1];
+            a.textContent = i;
+            li.appendChild(a);
+            pagination.appendChild(li);
+        }
+
+        // Update dropdown
+        const dropdown = document.querySelector('.dropdown-menu');
+        dropdown.innerHTML = '';
+        pageFiles.forEach((file, index) => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.className = 'dropdown-item';
+            a.href = file;
+            a.textContent = `${index + 1}. ${pageTitles[index]}`;
+            li.appendChild(a);
+            dropdown.appendChild(li);
+        });
+
+        // Prev/Next buttons
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        if (currentPage > 1) {
+            prevBtn.onclick = () => window.location.href = pageFiles[currentPage - 2];
+        } else {
+            prevBtn.disabled = true;
+        }
+
+        if (currentPage < totalPages) {
+            nextBtn.onclick = () => window.location.href = pageFiles[currentPage];
+        } else {
+            nextBtn.disabled = true;
+        }
+    </script>
+</body>
+
+</html>
+<button id="backToTop" class="btn btn-primary" style="position: fixed; bottom: 20px; right: 20px; display: none; z-index: 1001;"><i class="fas fa-arrow-up"></i></button>

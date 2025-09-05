@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCA InfraForge Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            padding: 30px;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .pagination {
+            justify-content: center;
+        }
+
+        .page-link {
+            color: #667eea;
+        }
+
+        .page-link:hover {
+            color: #764ba2;
+        }
+
+        .btn-prev,
+        .btn-next {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+        }
+
+        .btn-prev:hover,
+        .btn-next:hover {
+            background: linear-gradient(45deg, #764ba2, #667eea);
+            color: white;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #333;
+        }
+
+        code {
+            background: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: #ecf0f1;
+        }
+
+        body.dark-mode .container {
+            background: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        body.dark-mode .navbar {
+            background: rgba(44, 62, 80, 0.9);
+        }
+
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 {
+            color: #ecf0f1;
+        }
+
+        body.dark-mode code {
+            background: #34495e;
+            color: #ecf0f1;
+        }
+
+        body.dark-mode pre {
+            background: #34495e;
+            color: #ecf0f1;
+        }
+
+        body.dark-mode table th {
+            background-color: #34495e;
+        }
+
+        body.dark-mode table td {
+            border-color: #7f8c8d;
+        }
+
+        .copy-btn {
+            opacity: 0.7;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+        }
+
+        .content {
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">TCA InfraForge Docs</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Pages</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="01-executive-summary.html">1. Executive Summary</a></li>
+                            <li><a class="dropdown-item" href="02-architecture-overview.html">2. Architecture
+                                    Overview</a></li>
+                            <li><a class="dropdown-item" href="03-quick-start-guide.html">3. Quick Start Guide</a></li>
+                            <li><a class="dropdown-item" href="04-automated-deployment.html">4. Automated Deployment</a>
+                            </li>
+                            <li><a class="dropdown-item" href="05-container-kubernetes.html">5. Container &
+                                    <img src="https://kubernetes.io/images/favicon.png" alt="Kubernetes"
+                                        style="height:1.2em; vertical-align:middle;"> Kubernetes</a></li>
+                            <li><a class="dropdown-item" href="06-networking-ingress.html">6. Networking & Ingress</a>
+                            </li>
+                            <li><a class="dropdown-item" href="07-monitoring-observability.html">7. Monitoring &
+                                    Observability</a></li>
+                            <li><a class="dropdown-item" href="08-enterprise-applications.html">8. Enterprise
+                                    Applications</a></li>
+                            <li><a class="dropdown-item" href="09-security-compliance.html">9. Security & Compliance</a>
+                            </li>
+                            <li><a class="dropdown-item" href="10-cloudflare-integration.html">10. Cloudflare
+                                    Integration</a></li>
+                            <li><a class="dropdown-item" href="11-performance-optimization.html">11. Performance
+                                    Optimization</a></li>
+                            <li><a class="dropdown-item" href="12-ci-cd-pipeline.html">12. CI/CD Pipeline</a></li>
+                            <li><a class="dropdown-item" href="13-contributing-development.html">13. Contributing &
+                                    Development</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="d-flex me-2">
+                    <input class="form-control me-2" type="search" placeholder="Search headings..." id="searchInput">
+                </form>
+                <div class="d-flex">
+                    <button class="btn btn-outline-secondary me-2" id="darkModeToggle">
+                        <i class="fas fa-moon"></i> Dark
+                    </button>
+                    <button class="btn btn-prev me-2" id="prevBtn">Previous</button>
+                    <button class="btn btn-next" id="nextBtn">Next</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="progressBar" style="height: 4px; background: linear-gradient(45deg, #667eea, #764ba2); width: 0%; position: fixed; top: 0; left: 0; z-index: 1000;"></div>
+
+    <div class="container">
+        <nav aria-label="Page navigation">
+            <ul class="pagination" id="pagination">
+                <!-- Pagination will be generated by JS -->
+            </ul>
+        </nav>
+
+        <div class="content">
+            <h1 id="tc-enterprise-devops-platform---ghcr-setup-guide">🚀 TC Enterprise DevOps Platform - GHCR Setup Guide</h1>
+<h1 id="github-container-registry-integration">GitHub Container Registry Integration</h1>
+<h2 id="prerequisites">📋 Prerequisites</h2>
+<ol type="1">
+<li><strong>GitHub Token</strong>: Create a Personal Access Token at https://github.com/settings/tokens
+<ul>
+<li>Required scopes: <code>read:packages</code>, <code>write:packages</code>, <code>delete:packages</code></li>
+<li>Set as environment variable: <code>export GITHUB_TOKEN=your_token_here</code></li>
+</ul></li>
+<li><strong>Docker</strong>: Ensure Docker is running and you have images to push</li>
+</ol>
+<h2 id="setup-steps">🔧 Setup Steps</h2>
+<h3 id="step-1-authenticate-with-ghcr">Step 1: Authenticate with GHCR</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set your GitHub token</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">GITHUB_TOKEN</span><span class="op">=</span>your_github_token</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Login to GitHub Container Registry</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$GITHUB_TOKEN</span> <span class="kw">|</span> <span class="ex">docker</span> login ghcr.io <span class="at">-u</span> temitayocharles <span class="at">--password-stdin</span></span></code></pre></div>
+<h3 id="step-2-enable-dual-registry-mode">Step 2: Enable Dual Registry Mode</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the dual registry setup script</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./enable-dual-registry.sh</span></span></code></pre></div>
+<p>This script will: - ✅ Configure authentication for both registries - ✅ Set up automatic image synchronization - ✅ Update deployment manifests for hybrid usage - ✅ Enable cross-machine image sharing</p>
+<h3 id="step-3-push-your-images">Step 3: Push Your Images</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the automated dual-registry push script</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./tc-full-pipeline.sh</span></span></code></pre></div>
+<p>This script will: - ✅ Scan all your local Docker images - ✅ Tag them for both local registry and GHCR - ✅ Push to local registry (fast, private) - ✅ Push to GHCR (global sharing, backup) - ✅ Skip system images (k8s.gcr.io, etc.)</p>
+<h3 id="step-4-verify-your-images">Step 4: Verify Your Images</h3>
+<p>Visit: https://github.com/temitayocharles/tc-enterprise-devops-platform/packages</p>
+<h2 id="dual-registry-architecture">📦 Dual Registry Architecture</h2>
+<h3 id="hybrid-workflow-overview">Hybrid Workflow Overview</h3>
+<pre><code>┌─────────────────┐    ┌─────────────────┐
+│   Local Machine │    │   Remote/Team   │
+│                 │    │                 │
+│ ┌─────────────┐ │    │ ┌─────────────┐ │
+│ │ Local       │ │    │ │ GHCR        │ │
+│ │ Registry    │◄┼────┼►│ Registry    │ │
+│ │ (Fast)      │ │    │ │ (Global)    │ │
+│ └─────────────┘ │    │ └─────────────┘ │
+└─────────────────┘    └─────────────────┘
+         │                        │
+         └────────────────────────┘
+              Synchronization</code></pre>
+<h3 id="image-naming-convention">Image Naming Convention</h3>
+<p>Your images will be available in both registries:</p>
+<p><strong>Local Registry (Fast Development):</strong></p>
+<pre><code>localhost:5001/tc-enterprise-devops-platform/image-name:tag</code></pre>
+<p><strong>GitHub Container Registry (Global Sharing):</strong></p>
+<pre><code>ghcr.io/temitayocharles/tc-enterprise-devops-platform/image-name:tag</code></pre>
+<p>Examples: - <code>localhost:5001/tc-enterprise-devops-platform/tc-infrastructure-api:tc-v1.0-enterprise</code> - <code>ghcr.io/temitayocharles/tc-enterprise-devops-platform/nginx:latest</code></p>
+<h2 id="using-dual-registry-in-deployments">🚀 Using Dual Registry in Deployments</h2>
+<h3 id="automatic-updates">Automatic Updates</h3>
+<p>Your deployment files have been automatically updated to use the hybrid approach: - ✅ <code>config/tc-api-deployment.yaml</code> - Updated to use local registry primarily - ✅ <code>tc-full-pipeline.sh</code> - Handles dual registry synchronization - ✅ Other manifests use standard public images (no change needed)</p>
+<h3 id="smart-image-selection">Smart Image Selection</h3>
+<p>The platform automatically selects the best registry based on context:</p>
+<p><strong>Development/Local:</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Uses local registry for speed</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">image</span><span class="kw">:</span><span class="at"> localhost:5001/tc-enterprise-devops-platform/my-app:dev</span></span></code></pre></div>
+<p><strong>Production/Cross-Machine:</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Uses GHCR for reliability and sharing</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">image</span><span class="kw">:</span><span class="at"> ghcr.io/temitayocharles/tc-enterprise-devops-platform/my-app:v1.0</span></span></code></pre></div>
+<p><strong>Fallback Logic:</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Platform automatically falls back to GHCR if local registry unavailable</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">image</span><span class="kw">:</span><span class="at"> localhost:5001/tc-enterprise-devops-platform/my-app:v1.0</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># If localhost:5001 fails → tries ghcr.io/temitayocharles/tc-enterprise-devops-platform/my-app:v1.0</span></span></code></pre></div>
+<h2 id="benefits-of-dual-registry-setup">🌍 Benefits of Dual Registry Setup</h2>
+<h3 id="local-registry-benefits">Local Registry Benefits</h3>
+<ul>
+<li>✅ <strong>Lightning Fast</strong> - Sub-second image pulls locally</li>
+<li>✅ <strong>Zero Network Latency</strong> - No internet dependency</li>
+<li>✅ <strong>Resource Efficient</strong> - Minimal CPU/memory usage</li>
+<li>✅ <strong>Private</strong> - Images stay on your machine</li>
+<li>✅ <strong>Always Available</strong> - Works offline</li>
+</ul>
+<h3 id="ghcr-benefits">GHCR Benefits</h3>
+<ul>
+<li>✅ <strong>Free</strong> for public repositories</li>
+<li>✅ <strong>Unlimited storage</strong></li>
+<li>✅ <strong>Global CDN</strong> - Fast pulls worldwide</li>
+<li>✅ <strong>Integrated</strong> with GitHub (same auth, same repo)</li>
+<li>✅ <strong>Version control</strong> - Images tied to your commits</li>
+<li>✅ <strong>Public access</strong> - Share with the community</li>
+<li>✅ <strong>Backup</strong> - Images preserved if local registry lost</li>
+</ul>
+<h3 id="combined-benefits">Combined Benefits</h3>
+<ul>
+<li>✅ <strong>Best of Both Worlds</strong> - Fast local + global sharing</li>
+<li>✅ <strong>Cross-Machine Sharing</strong> - Share images between your Mac Mini and MacBook</li>
+<li>✅ <strong>Production Ready</strong> - Reliable global distribution</li>
+<li>✅ <strong>Resource Conscious</strong> - Minimal local resource usage</li>
+<li>✅ <strong>Automated</strong> - Scripts handle synchronization</li>
+</ul>
+<h2 id="hybrid-workflow-patterns">🔄 Hybrid Workflow Patterns</h2>
+<h3 id="development-workflow">Development Workflow</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Develop locally with fast iterations</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> my-app:dev .</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> tag my-app:dev localhost:5001/tc-enterprise-devops-platform/my-app:dev</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Push to both registries when ready to share</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="ex">./tc-full-pipeline.sh</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Deploy locally (uses local registry)</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> deployment-local.yaml</span></code></pre></div>
+<h3 id="production-workflow">Production Workflow</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Build and push to both registries</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./tc-full-pipeline.sh</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Deploy to production (can use GHCR for reliability)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> deployment-prod.yaml</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Share with team (available on GHCR)</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Team members can pull: docker pull ghcr.io/temitayocharles/tc-enterprise-devops-platform/my-app:v1.0</span></span></code></pre></div>
+<h3 id="cross-machine-sharing">Cross-Machine Sharing</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># On Mac Mini (build machine)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./tc-full-pipeline.sh</span>  <span class="co"># Pushes to both registries</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># On MacBook (development machine)</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Automatically pulls from GHCR if local registry not available</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> deployment.yaml</span></code></pre></div>
+<h2 id="monitoring-your-usage">📊 Monitoring Your Usage</h2>
+<h3 id="local-registry">Local Registry</h3>
+<ul>
+<li><strong>Status</strong>: <code>./scripts/check-registry-status.sh</code></li>
+<li><strong>Images</strong>: <code>curl http://localhost:5001/v2/_catalog</code></li>
+<li><strong>Storage</strong>: Minimal impact (&lt; 100MB typical)</li>
+</ul>
+<h3 id="ghcr-usage">GHCR Usage</h3>
+<ul>
+<li><strong>View packages</strong>: https://github.com/temitayocharles/tc-enterprise-devops-platform/packages</li>
+<li><strong>Download stats</strong>: Available in GitHub Insights</li>
+<li><strong>Storage usage</strong>: Unlimited for public repos</li>
+</ul>
+<h2 id="troubleshooting">🛠️ Troubleshooting</h2>
+<h3 id="authentication-issues">Authentication Issues</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-login if token expires</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$GITHUB_TOKEN</span> <span class="kw">|</span> <span class="ex">docker</span> login ghcr.io <span class="at">-u</span> temitayocharles <span class="at">--password-stdin</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify authentication</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull ghcr.io/temitayocharles/tc-enterprise-devops-platform/alpine:latest</span></code></pre></div>
+<h3 id="dual-registry-issues">Dual Registry Issues</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check local registry status</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> http://localhost:5001/v2/</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Test GHCR connectivity</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull ghcr.io/temitayocharles/tc-enterprise-devops-platform/alpine:latest</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-run dual registry setup</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="ex">./enable-dual-registry.sh</span></span></code></pre></div>
+<h3 id="permission-denied">Permission Denied</h3>
+<ul>
+<li>Ensure your GitHub token has the correct scopes</li>
+<li>Verify you’re using the correct username</li>
+<li>Check if token has expired</li>
+</ul>
+<h3 id="image-not-found">Image Not Found</h3>
+<ul>
+<li>Check the exact image name in both registries</li>
+<li>Ensure the image was pushed successfully with <code>./tc-full-pipeline.sh</code></li>
+<li>Verify the tag exists in both locations</li>
+</ul>
+<h3 id="synchronization-issues">Synchronization Issues</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual sync if automatic sync fails</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./tc-full-pipeline.sh</span> <span class="at">--sync-only</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check sync status</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/check-sync-status.sh</span></span></code></pre></div>
+<h2 id="success">🎉 Success!</h2>
+<p>Your enterprise platform now has: - ✅ <strong>Dual Registry Architecture</strong> - Fast local + global sharing - ✅ <strong>Cross-Machine Collaboration</strong> - Share images between devices - ✅ <strong>Production-Ready</strong> - Reliable global distribution - ✅ <strong>Resource Efficient</strong> - Minimal local resource usage - ✅ <strong>Automated Synchronization</strong> - Seamless dual registry management - ✅ <strong>Community Sharing</strong> - Public access capabilities</p>
+<p><strong>Ready to deploy anywhere in the world with optimal performance!</strong> 🌍</p>
+<hr />
+<h2 id="additional-resources">📚 Additional Resources</h2>
+<ul>
+<li><a href="../README.md">Main README</a> - Platform overview and quick start</li>
+<li><a href="../docs/02-architecture-overview.md">Architecture Documentation</a> - Technical details</li>
+<li><a href="../KUBERNETES-TROUBLESHOOTING.md">Troubleshooting Guide</a> - Common issues and solutions</li>
+</ul>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+
+        // Add copy buttons to code blocks
+        document.querySelectorAll('pre').forEach(pre => {
+            const button = document.createElement('button');
+            button.className = 'btn btn-sm btn-outline-primary copy-btn';
+            button.innerHTML = '<i class="fas fa-copy"></i>';
+            button.style.position = 'absolute';
+            button.style.top = '10px';
+            button.style.right = '10px';
+            pre.style.position = 'relative';
+            pre.appendChild(button);
+            button.addEventListener('click', () => {
+                const code = pre.querySelector('code') ? pre.querySelector('code').textContent : pre.textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    button.innerHTML = '<i class="fas fa-check"></i>';
+                    setTimeout(() => button.innerHTML = '<i class="fas fa-copy"></i>', 2000);
+                });
+            });
+        });
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const icon = darkModeToggle.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                darkModeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
+        }
+
+        // Reading progress
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.body.offsetHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('progressBar').style.width = scrollPercent + '%';
+        });
+
+        // Back to top
+        const backToTopBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.style.display = 'block';
+            } else {
+                backToTopBtn.style.display = 'none';
+            }
+        });
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            let found = false;
+            headings.forEach(h => {
+                if (!found && h.textContent.toLowerCase().includes(query)) {
+                    h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    found = true;
+                }
+            });
+        });
+
+        // Get current page number from filename
+        const currentPath = window.location.pathname;
+        const fileName = currentPath.split('/').pop();
+
+        const pageFiles = [
+            '01-executive-summary.html',
+            '02-architecture-overview.html',
+            '03-quick-start-guide.html',
+            '04-automated-deployment.html',
+            '05-container-kubernetes.html',
+            '06-networking-ingress.html',
+            '07-monitoring-observability.html',
+            '08-enterprise-applications.html',
+            '09-security-compliance.html',
+            '10-cloudflare-integration.html',
+            '10-troubleshooting-guide.html',
+            '11-performance-optimization.html',
+            '11-troubleshooting-guide.html',
+            '12-ci-cd-pipeline.html',
+            '13-contributing-development.html',
+            'ABOUT.html',
+            'ADVANCED-TOOLS-INTEGRATION-REPORT.html',
+            'APPLE-SILICON-INTEGRATION.html',
+            'BOOK.html',
+            'CLOUDFLARE-DNS-CLI-SETUP.html',
+            'CONSOLIDATION-COMPLETE.html',
+            'ENHANCEMENT-DOCUMENTATION.html',
+            'GHCR-SETUP-GUIDE.html',
+            'INDEX.html',
+            'KUBERNETES-TROUBLESHOOTING.html',
+            'MAC-MINI-QUICKSTART.html',
+            'README.html',
+            'SCRIPT-SECURITY-AUDIT.html',
+            'SECURITY-SETUP-GUIDE.html'
+        ];
+
+        const pageTitles = pageFiles.map(file => file.replace('.html', '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
+
+        let currentPage = pageFiles.indexOf(fileName) + 1;
+        if (currentPage === 0) currentPage = 1; // for index.html or others
+
+        const totalPages = pageFiles.length;
+
+        // Generate pagination
+        const pagination = document.getElementById('pagination');
+        for (let i = 1; i <= totalPages; i++) {
+            const li = document.createElement('li');
+            li.className = 'page-item' + (i === currentPage ? ' active' : '');
+            const a = document.createElement('a');
+            a.className = 'page-link';
+            a.href = pageFiles[i - 1];
+            a.textContent = i;
+            li.appendChild(a);
+            pagination.appendChild(li);
+        }
+
+        // Update dropdown
+        const dropdown = document.querySelector('.dropdown-menu');
+        dropdown.innerHTML = '';
+        pageFiles.forEach((file, index) => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.className = 'dropdown-item';
+            a.href = file;
+            a.textContent = `${index + 1}. ${pageTitles[index]}`;
+            li.appendChild(a);
+            dropdown.appendChild(li);
+        });
+
+        // Prev/Next buttons
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        if (currentPage > 1) {
+            prevBtn.onclick = () => window.location.href = pageFiles[currentPage - 2];
+        } else {
+            prevBtn.disabled = true;
+        }
+
+        if (currentPage < totalPages) {
+            nextBtn.onclick = () => window.location.href = pageFiles[currentPage];
+        } else {
+            nextBtn.disabled = true;
+        }
+    </script>
+</body>
+
+</html>
+<button id="backToTop" class="btn btn-primary" style="position: fixed; bottom: 20px; right: 20px; display: none; z-index: 1001;"><i class="fas fa-arrow-up"></i></button>

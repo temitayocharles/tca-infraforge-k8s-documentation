@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCA InfraForge Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            padding: 30px;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .pagination {
+            justify-content: center;
+        }
+
+        .page-link {
+            color: #667eea;
+        }
+
+        .page-link:hover {
+            color: #764ba2;
+        }
+
+        .btn-prev,
+        .btn-next {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+        }
+
+        .btn-prev:hover,
+        .btn-next:hover {
+            background: linear-gradient(45deg, #764ba2, #667eea);
+            color: white;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #333;
+        }
+
+        code {
+            background: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: #ecf0f1;
+        }
+
+        body.dark-mode .container {
+            background: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        body.dark-mode .navbar {
+            background: rgba(44, 62, 80, 0.9);
+        }
+
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 {
+            color: #ecf0f1;
+        }
+
+        body.dark-mode code {
+            background: #34495e;
+            color: #ecf0f1;
+        }
+
+        body.dark-mode pre {
+            background: #34495e;
+            color: #ecf0f1;
+        }
+
+        body.dark-mode table th {
+            background-color: #34495e;
+        }
+
+        body.dark-mode table td {
+            border-color: #7f8c8d;
+        }
+
+        .copy-btn {
+            opacity: 0.7;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+        }
+
+        .content {
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">TCA InfraForge Docs</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Pages</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="01-executive-summary.html">1. Executive Summary</a></li>
+                            <li><a class="dropdown-item" href="02-architecture-overview.html">2. Architecture
+                                    Overview</a></li>
+                            <li><a class="dropdown-item" href="03-quick-start-guide.html">3. Quick Start Guide</a></li>
+                            <li><a class="dropdown-item" href="04-automated-deployment.html">4. Automated Deployment</a>
+                            </li>
+                            <li><a class="dropdown-item" href="05-container-kubernetes.html">5. Container &
+                                    <img src="https://kubernetes.io/images/favicon.png" alt="Kubernetes"
+                                        style="height:1.2em; vertical-align:middle;"> Kubernetes</a></li>
+                            <li><a class="dropdown-item" href="06-networking-ingress.html">6. Networking & Ingress</a>
+                            </li>
+                            <li><a class="dropdown-item" href="07-monitoring-observability.html">7. Monitoring &
+                                    Observability</a></li>
+                            <li><a class="dropdown-item" href="08-enterprise-applications.html">8. Enterprise
+                                    Applications</a></li>
+                            <li><a class="dropdown-item" href="09-security-compliance.html">9. Security & Compliance</a>
+                            </li>
+                            <li><a class="dropdown-item" href="10-cloudflare-integration.html">10. Cloudflare
+                                    Integration</a></li>
+                            <li><a class="dropdown-item" href="11-performance-optimization.html">11. Performance
+                                    Optimization</a></li>
+                            <li><a class="dropdown-item" href="12-ci-cd-pipeline.html">12. CI/CD Pipeline</a></li>
+                            <li><a class="dropdown-item" href="13-contributing-development.html">13. Contributing &
+                                    Development</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="d-flex me-2">
+                    <input class="form-control me-2" type="search" placeholder="Search headings..." id="searchInput">
+                </form>
+                <div class="d-flex">
+                    <button class="btn btn-outline-secondary me-2" id="darkModeToggle">
+                        <i class="fas fa-moon"></i> Dark
+                    </button>
+                    <button class="btn btn-prev me-2" id="prevBtn">Previous</button>
+                    <button class="btn btn-next" id="nextBtn">Next</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="progressBar" style="height: 4px; background: linear-gradient(45deg, #667eea, #764ba2); width: 0%; position: fixed; top: 0; left: 0; z-index: 1000;"></div>
+
+    <div class="container">
+        <nav aria-label="Page navigation">
+            <ul class="pagination" id="pagination">
+                <!-- Pagination will be generated by JS -->
+            </ul>
+        </nav>
+
+        <div class="content">
+            <h1 id="chapter-4-automated-deployment">🔧 Chapter 4: Automated Deployment</h1>
+<h2 id="learning-objectives">🎯 Learning Objectives</h2>
+<p>By the end of this chapter, you’ll understand: - How TCA InfraForge achieves zero-touch deployment - The intelligent deployment process and retry mechanisms - Progress monitoring and validation techniques - Troubleshooting deployment issues</p>
+<p><strong>⏱️ Time to Complete:</strong> 20-25 minutes<br />
+<strong>💡 Difficulty:</strong> Intermediate<br />
+<strong>🎯 Prerequisites:</strong> Basic understanding of containers and the Architecture Overview</p>
+<hr />
+<h2 id="zero-touch-deployment-philosophy">🚀 Zero-Touch Deployment Philosophy</h2>
+<p>TCA InfraForge’s deployment is designed to be <strong>completely hands-free</strong> - you start it, and it handles everything. Think of it as having a highly skilled DevOps engineer working 24/7, but without the coffee breaks or human errors.</p>
+<h3 id="what-makes-it-zero-touch">What Makes It “Zero-Touch”?</h3>
+<ul>
+<li><strong>🤖 Intelligent Detection:</strong> Automatically detects your hardware and environment</li>
+<li><strong>⚙️ Smart Configuration:</strong> Selects optimal settings based on your system</li>
+<li><strong>🔄 Auto-Recovery:</strong> Handles failures gracefully with intelligent retries</li>
+<li><strong>📊 Real-Time Monitoring:</strong> Shows progress and handles issues proactively</li>
+<li><strong>✅ Self-Validation:</strong> Verifies everything works before declaring success</li>
+</ul>
+<hr />
+<h2 id="deployment-process-overview">🏁 Deployment Process Overview</h2>
+<h3 id="the-complete-deployment-flow">The Complete Deployment Flow</h3>
+<pre class="mermaid"><code>graph TD
+    A[🚀 Start Command] --&gt; B{Environment Check}
+    B --&gt; C[📊 Hardware Analysis]
+    C --&gt; D[⚙️ Profile Selection]
+    D --&gt; E[🐳 KIND Cluster Setup]
+    E --&gt; F[📦 Core Services Deployment]
+    F --&gt; G[🔒 Security Configuration]
+    G --&gt; H[📊 Monitoring Setup]
+    H --&gt; I[✅ Health Validation]
+    I --&gt; J[🎉 Success!]
+
+    B --&gt; K[❌ Issues Found?]
+    K --&gt; L[🔧 Auto-Fix Attempts]
+    L --&gt; M{Resolved?}
+    M --&gt; B
+    M --&gt; N[🆘 User Intervention]
+    N --&gt; B</code></pre>
+<h3 id="key-stages-explained">Key Stages Explained</h3>
+<h4 id="environment-check---safety-first">1️⃣ <strong>Environment Check</strong> - Safety First</h4>
+<p><strong>What happens:</strong> TCA InfraForge scans your system for compatibility - ✅ Operating System validation (Linux/macOS/Windows) - ✅ Hardware requirements check (RAM, CPU, disk space) - ✅ Network connectivity verification - ✅ Required tools availability (Docker, kubectl, etc.)</p>
+<p><strong>Real-world analogy:</strong> Like a pilot doing pre-flight checks before takeoff</p>
+<h4 id="hardware-analysis---smart-sizing">2️⃣ <strong>Hardware Analysis</strong> - Smart Sizing</h4>
+<p><strong>What happens:</strong> Intelligent resource detection and profile selection - 📊 RAM detection and memory allocation - ⚡ CPU core counting and thread optimization - 💾 Disk space assessment and storage planning - 🌐 Network bandwidth evaluation</p>
+<h4 id="profile-selection---right-tool-for-the-job">3️⃣ <strong>Profile Selection</strong> - Right Tool for the Job</h4>
+<p><strong>What happens:</strong> Automatic selection of optimal configuration</p>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Profile</th>
+<th>RAM</th>
+<th>CPU</th>
+<th>Use Case</th>
+<th>Services</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>🏢 Enterprise</strong></td>
+<td>32GB+</td>
+<td>8+ cores</td>
+<td>Production-grade</td>
+<td>Full stack + HA</td>
+</tr>
+<tr>
+<td><strong>💼 Professional</strong></td>
+<td>16GB+</td>
+<td>4+ cores</td>
+<td>Development teams</td>
+<td>Core + monitoring</td>
+</tr>
+<tr>
+<td><strong>📊 Standard</strong></td>
+<td>8GB+</td>
+<td>4+ cores</td>
+<td>Small teams</td>
+<td>Essential services</td>
+</tr>
+<tr>
+<td><strong>🧪 Minimal</strong></td>
+<td>4GB+</td>
+<td>2+ cores</td>
+<td>Individual dev</td>
+<td>Basic functionality</td>
+</tr>
+</tbody>
+</table>
+<h4 id="kind-cluster-setup---your-private-cloud">4️⃣ <strong>KIND Cluster Setup</strong> - Your Private Cloud</h4>
+<p><strong>What happens:</strong> Creates a production-ready Kubernetes cluster - 🐳 Docker container setup for KIND nodes - ☸️ Kubernetes control plane initialization - 🌐 Networking configuration (CNI, ingress) - 💾 Persistent volume provisioning</p>
+<h4 id="core-services-deployment---building-the-platform">5️⃣ <strong>Core Services Deployment</strong> - Building the Platform</h4>
+<p><strong>What happens:</strong> Deploys all enterprise services in the right order - 📦 Container registry setup - 💾 Database initialization (PostgreSQL) - 🚀 Caching layer (Redis) - 🔒 Secrets management (Vault) - 📊 Monitoring stack (Prometheus, Grafana)</p>
+<h4 id="security-configuration---lock-it-down">6️⃣ <strong>Security Configuration</strong> - Lock It Down</h4>
+<p><strong>What happens:</strong> Implements enterprise-grade security - 🔐 SSL/TLS certificate generation - 👥 RBAC role setup - 🛡️ Network policies application - 🔒 Secrets initialization</p>
+<h4 id="monitoring-setup---watch-everything">7️⃣ <strong>Monitoring Setup</strong> - Watch Everything</h4>
+<p><strong>What happens:</strong> Configures complete observability - 📊 Prometheus metrics collection - 📈 Grafana dashboard creation - 🚨 AlertManager configuration - 📜 Logging aggregation setup</p>
+<h4 id="health-validation---quality-assurance">8️⃣ <strong>Health Validation</strong> - Quality Assurance</h4>
+<p><strong>What happens:</strong> Comprehensive testing of all components - ✅ Service health checks - 🔗 Connectivity validation - 📊 Performance benchmarks - 🧪 Integration testing</p>
+<hr />
+<h2 id="interactive-deployment-experience">🎮 Interactive Deployment Experience</h2>
+<h3 id="real-time-progress-monitoring">Real-Time Progress Monitoring</h3>
+<p>TCA InfraForge provides <strong>live updates</strong> throughout the deployment process:</p>
+<pre><code>🚀 TCA InfraForge Deployment Started
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 Phase 1/8: Environment Analysis
+   ✅ Operating System: macOS 14.5 (Compatible)
+   ✅ Hardware: 16GB RAM, 8 cores (Professional Profile)
+   ✅ Network: Internet connection detected
+   ✅ Docker: Version 24.0.6 (Ready)
+
+⚙️ Phase 2/8: Profile Selection
+   🎯 Selected: Professional Profile
+   📋 Services: Core + Monitoring + Security
+
+🐳 Phase 3/8: KIND Cluster Setup
+   🔄 Creating cluster nodes... [████████████░░░░] 75%
+   ☸️ Control plane ready
+   🌐 Networking configured
+
+📦 Phase 4/8: Core Services
+   🔄 Deploying PostgreSQL... [██████████████░░] 85%
+   🔄 Deploying Redis... [████████████████░░] 90%
+   🔄 Deploying Vault... [██████████████████] 100%
+
+🔒 Phase 5/8: Security Configuration
+   🔄 Generating certificates... [██████████████░░] 85%
+   🔄 Setting up RBAC... [██████████████████] 100%
+
+📊 Phase 6/8: Monitoring Setup
+   🔄 Prometheus deployment... [██████████████░░] 85%
+   🔄 Grafana configuration... [██████████████████] 100%
+
+✅ Phase 7/8: Health Validation
+   🔄 Running health checks... [██████████████░░] 85%
+   ✅ All services healthy
+
+🎉 Phase 8/8: Deployment Complete!
+   🌐 Access URLs:
+      • Platform Dashboard: https://localhost:8443
+      • Grafana: https://localhost:3000
+      • Vault UI: https://localhost:8200
+
+⏱️ Total deployment time: 12 minutes 34 seconds</code></pre>
+<h3 id="smart-error-handling">Smart Error Handling</h3>
+<p>When issues occur, TCA InfraForge doesn’t just fail - it <strong>adapts and recovers</strong>:</p>
+<pre><code>⚠️ Issue Detected: Port 8443 already in use
+🔧 Auto-Resolution: Finding available port...
+✅ Resolution: Using port 8444 instead
+🔄 Continuing deployment...</code></pre>
+<hr />
+<h2 id="deployment-commands">🛠️ Deployment Commands</h2>
+<h3 id="one-command-deployment">One-Command Deployment</h3>
+<p>The simplest way to get started:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Interactive deployment (recommended)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./enterprise-lab-orchestrator.sh</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Or if the script has a different name, try:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">./deploy-tc-enterprise.sh</span></span></code></pre></div>
+<h3 id="advanced-deployment-options">Advanced Deployment Options</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Force clean installation</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./enterprise-lab-orchestrator.sh</span> <span class="at">--force-reinstall</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Skip validation (faster, but less safe)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">./enterprise-lab-orchestrator.sh</span> <span class="at">--skip-validation</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Enable debug output</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">./enterprise-lab-orchestrator.sh</span> <span class="at">--debug</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview deployment without changes</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="ex">./enterprise-lab-orchestrator.sh</span> <span class="at">--dry-run</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Auto-confirm all prompts</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="ex">./enterprise-lab-orchestrator.sh</span> <span class="at">--auto-confirm</span></span></code></pre></div>
+<h3 id="manual-step-by-step-deployment">Manual Step-by-Step Deployment</h3>
+<p>If you prefer more control:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Validate environment</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./scripts/validate-environment.sh</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Create KIND cluster</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kind</span> create cluster <span class="at">--config</span> kind-cluster-standard.yaml</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Deploy core services</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> postgres-deployment.yaml</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> redis-deployment.yaml</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> vault-deployment.yaml</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Deploy monitoring</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> prometheus-basic.yaml</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> grafana-deployment.yaml</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Configure ingress</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> fullstack-ingress.yaml</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Validate deployment</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="ex">./verify-deployment.sh</span></span></code></pre></div>
+<hr />
+<h2 id="deployment-profiles-deep-dive">📊 Deployment Profiles Deep Dive</h2>
+<h3 id="enterprise-profile-32gb-ram">Enterprise Profile (32GB+ RAM)</h3>
+<p><strong>Perfect for:</strong> Production environments, large teams, critical applications</p>
+<p><strong>Services Included:</strong> - ✅ High-Availability PostgreSQL cluster - ✅ Redis Sentinel for caching - ✅ HashiCorp Vault Enterprise - ✅ Full Prometheus + Grafana stack - ✅ Enterprise security hardening - ✅ Automated backups - ✅ Multi-zone support</p>
+<p><strong>Resource Allocation:</strong> - Control Plane: 4 vCPUs, 8GB RAM - Worker Nodes: 8 vCPUs, 16GB RAM each - Database: Dedicated node with 8GB RAM - Monitoring: Dedicated node with 4GB RAM</p>
+<h3 id="professional-profile-16gb-ram">Professional Profile (16GB+ RAM)</h3>
+<p><strong>Perfect for:</strong> Development teams, staging environments, medium-scale projects</p>
+<p><strong>Services Included:</strong> - ✅ PostgreSQL with replication - ✅ Redis caching - ✅ HashiCorp Vault - ✅ Prometheus + Grafana monitoring - ✅ Security hardening - ✅ Automated backups</p>
+<p><strong>Resource Allocation:</strong> - Control Plane: 2 vCPUs, 4GB RAM - Worker Nodes: 4 vCPUs, 8GB RAM each - Shared database and monitoring</p>
+<h3 id="standard-profile-8gb-ram">Standard Profile (8GB+ RAM)</h3>
+<p><strong>Perfect for:</strong> Small teams, individual developers, testing</p>
+<p><strong>Services Included:</strong> - ✅ PostgreSQL database - ✅ Redis caching - ✅ Basic monitoring - ✅ Essential security</p>
+<p><strong>Resource Allocation:</strong> - Control Plane: 2 vCPUs, 4GB RAM - Worker Nodes: 2 vCPUs, 4GB RAM each - Consolidated services</p>
+<h3 id="minimal-profile-4gb-ram">Minimal Profile (4GB+ RAM)</h3>
+<p><strong>Perfect for:</strong> Learning, experimentation, resource-constrained environments</p>
+<p><strong>Services Included:</strong> - ✅ Basic PostgreSQL - ✅ Essential API services - ✅ Core functionality only</p>
+<p><strong>Resource Allocation:</strong> - Single node: 2 vCPUs, 4GB RAM - Minimal service footprint</p>
+<hr />
+<h2 id="intelligent-retry-mechanisms">🔄 Intelligent Retry Mechanisms</h2>
+<h3 id="smart-failure-recovery">Smart Failure Recovery</h3>
+<p>TCA InfraForge doesn’t give up easily. It implements <strong>intelligent retry strategies</strong>:</p>
+<pre class="mermaid"><code>graph TD
+    A[Task Failure] --&gt; B{Analyze Error}
+    B --&gt; C{Retryable?}
+    C --&gt; D[Yes] --&gt; E[Wait Strategy]
+    C --&gt; F[No] --&gt; G[User Intervention]
+
+    E --&gt; H{Attempt Count}
+    H --&gt; I[&lt; 3] --&gt; J[Immediate Retry]
+    H --&gt; K[3-5] --&gt; L[Exponential Backoff]
+    H --&gt; M[&gt; 5] --&gt; N[Manual Intervention]
+
+    J --&gt; O[Task Success?]
+    L --&gt; O
+    O --&gt; P[Yes] --&gt; Q[Continue Deployment]
+    O --&gt; R[No] --&gt; B</code></pre>
+<h3 id="common-recovery-scenarios">Common Recovery Scenarios</h3>
+<h4 id="network-timeout-recovery">Network Timeout Recovery</h4>
+<pre><code>🔄 Attempt 1: Network timeout - Retrying immediately...
+🔄 Attempt 2: Network timeout - Waiting 5 seconds...
+🔄 Attempt 3: Network timeout - Waiting 15 seconds...
+✅ Attempt 4: Success! Continuing deployment...</code></pre>
+<h4 id="resource-conflict-resolution">Resource Conflict Resolution</h4>
+<pre><code>⚠️ Port 3000 already in use by another service
+🔧 Auto-resolution: Finding available port...
+✅ Using port 3001 instead
+🔄 Continuing deployment...</code></pre>
+<h4 id="service-dependency-issues">Service Dependency Issues</h4>
+<pre><code>⚠️ PostgreSQL not ready yet
+🔧 Waiting for database initialization...
+🔄 Retrying in 10 seconds...
+✅ Database ready! Continuing deployment...</code></pre>
+<hr />
+<h2 id="progress-monitoring-validation">📈 Progress Monitoring &amp; Validation</h2>
+<h3 id="real-time-health-checks">Real-Time Health Checks</h3>
+<p>Throughout deployment, TCA InfraForge continuously validates:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Service Health Validation</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Kubernetes API Server: Healthy</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> PostgreSQL Database: Ready</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Redis Cache: Connected</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Vault Secrets: Initialized</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Prometheus Metrics: Collecting</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Grafana Dashboards: Loaded</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> Ingress Controller: Routing</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="ex">✅</span> SSL Certificates: Valid</span></code></pre></div>
+<h3 id="performance-benchmarks">Performance Benchmarks</h3>
+<p>After deployment, TCA InfraForge runs performance tests:</p>
+<pre><code>📊 Performance Validation Results:
+   • API Response Time: &lt; 100ms ✅
+   • Database Query Time: &lt; 50ms ✅
+   • Cache Hit Rate: &gt; 95% ✅
+   • Network Latency: &lt; 10ms ✅
+   • CPU Usage: &lt; 70% ✅
+   • Memory Usage: &lt; 80% ✅</code></pre>
+<h3 id="integration-testing">Integration Testing</h3>
+<p>Final validation ensures all components work together:</p>
+<pre><code>🧪 Integration Test Results:
+   • User Authentication: ✅
+   • Database Operations: ✅
+   • Cache Functionality: ✅
+   • Monitoring Alerts: ✅
+   • Backup Operations: ✅
+   • Security Policies: ✅</code></pre>
+<hr />
+<h2 id="troubleshooting-deployment-issues">🆘 Troubleshooting Deployment Issues</h2>
+<h3 id="common-issues-solutions">Common Issues &amp; Solutions</h3>
+<h4 id="issue-docker-not-running">Issue: Docker Not Running</h4>
+<pre><code>❌ Error: Cannot connect to Docker daemon
+✅ Solution: Start Docker Desktop or Docker service
+   macOS: Open Docker Desktop
+   Linux: sudo systemctl start docker</code></pre>
+<h4 id="issue-insufficient-resources">Issue: Insufficient Resources</h4>
+<pre><code>❌ Error: Insufficient memory for selected profile
+✅ Solution: Choose a smaller profile or free up memory
+   ./enterprise-lab-orchestrator.sh --profile=minimal</code></pre>
+<h4 id="issue-port-conflicts">Issue: Port Conflicts</h4>
+<pre><code>❌ Error: Port 8443 already in use
+✅ Solution: TCA InfraForge will auto-select available ports
+   Or manually specify: --port=8444</code></pre>
+<h4 id="issue-network-issues">Issue: Network Issues</h4>
+<pre><code>❌ Error: Cannot pull images from registry
+✅ Solution: Check internet connection and DNS
+   Or use local registry: --offline-mode</code></pre>
+<h3 id="debug-mode-deployment">Debug Mode Deployment</h3>
+<p>For detailed troubleshooting:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Enable verbose logging</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./enterprise-lab-orchestrator.sh</span> <span class="at">--debug</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># View detailed logs</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-f</span> /tmp/tca-deployment.log</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check Kubernetes events</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get events <span class="at">--sort-by</span><span class="op">=</span>.metadata.creationTimestamp</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># View pod logs</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> logs <span class="at">-f</span> deployment/tca-api-server</span></code></pre></div>
+<hr />
+<h2 id="deployment-best-practices">🎯 Deployment Best Practices</h2>
+<h3 id="pre-deployment-checklist">Pre-Deployment Checklist</h3>
+<ul>
+<li>✅ <strong>System Resources:</strong> Ensure adequate RAM/CPU for selected profile</li>
+<li>✅ <strong>Network Access:</strong> Verify internet connectivity for image pulls</li>
+<li>✅ <strong>Port Availability:</strong> Check that required ports are free</li>
+<li>✅ <strong>Docker Running:</strong> Confirm Docker daemon is active</li>
+<li>✅ <strong>Disk Space:</strong> Ensure 20GB+ free space available</li>
+</ul>
+<h3 id="during-deployment">During Deployment</h3>
+<ul>
+<li>📊 <strong>Monitor Progress:</strong> Watch the real-time status updates</li>
+<li>🚨 <strong>Address Issues:</strong> Respond to any prompts or error messages</li>
+<li>📝 <strong>Take Notes:</strong> Record any custom configurations or ports used</li>
+<li>⏱️ <strong>Be Patient:</strong> Large deployments can take 15-30 minutes</li>
+</ul>
+<h3 id="post-deployment">Post-Deployment</h3>
+<ul>
+<li>✅ <strong>Verify Access:</strong> Test all provided URLs and endpoints</li>
+<li>📊 <strong>Check Monitoring:</strong> Ensure Grafana and Prometheus are working</li>
+<li>🔒 <strong>Review Security:</strong> Confirm SSL certificates and access controls</li>
+<li>💾 <strong>Test Backups:</strong> Verify backup functionality is operational</li>
+</ul>
+<hr />
+<h2 id="summary">📋 Summary</h2>
+<p>TCA InfraForge’s automated deployment system transforms complex enterprise infrastructure setup into a <strong>simple, reliable process</strong>. The intelligent design ensures:</p>
+<ul>
+<li><strong>🤖 Zero-Touch Operation:</strong> Minimal user intervention required</li>
+<li><strong>🔄 Smart Recovery:</strong> Automatic handling of common issues</li>
+<li><strong>📊 Real-Time Monitoring:</strong> Complete visibility into deployment progress</li>
+<li><strong>✅ Comprehensive Validation:</strong> Thorough testing before completion</li>
+<li><strong>⚙️ Profile Optimization:</strong> Right-sized configurations for any environment</li>
+</ul>
+<h3 id="key-takeaways">Key Takeaways</h3>
+<ol type="1">
+<li><strong>Intelligent Detection:</strong> Automatically adapts to your environment</li>
+<li><strong>Profile-Based Deployment:</strong> Optimal configurations for different needs</li>
+<li><strong>Smart Error Handling:</strong> Graceful recovery from common issues</li>
+<li><strong>Real-Time Monitoring:</strong> Complete visibility throughout the process</li>
+<li><strong>Comprehensive Validation:</strong> Ensures everything works before completion</li>
+</ol>
+<hr />
+<h2 id="whats-next">🎯 What’s Next?</h2>
+<p>Now that you understand the deployment process, you’re ready to:</p>
+<ol type="1">
+<li><strong><a href="./05-container-kubernetes.md">🐳 Container &amp; Kubernetes</a></strong> - Deep dive into the container runtime</li>
+<li><strong><a href="./07-monitoring-observability.md">📊 Monitoring &amp; Observability</a></strong> - Set up comprehensive monitoring</li>
+<li><strong><a href="./09-security-compliance.md">🔒 Security &amp; Compliance</a></strong> - Understand security implementations</li>
+</ol>
+<hr />
+<h2 id="environment-specific-deployments">🌍 Environment-Specific Deployments</h2>
+<p>TCA InfraForge supports <strong>multiple environments</strong> with different configurations:</p>
+<h3 id="available-environments">Available Environments</h3>
+<ul>
+<li><strong>Sandbox</strong>: Development environment with minimal resources</li>
+<li><strong>Stage</strong>: Testing environment with moderate scaling</li>
+<li><strong>Production</strong>: Full production setup with high availability</li>
+</ul>
+<h3 id="how-it-works">How It Works</h3>
+<p>Each environment uses <strong>Kustomize overlays</strong> to customize: - Number of replicas (1 for sandbox, 2 for stage, 3 for prod) - Resource limits and requests - Image versions and tags - Environment-specific configurations</p>
+<h3 id="quick-deployment-commands">Quick Deployment Commands</h3>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Deploy to sandbox</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> deploy-sandbox</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Deploy to stage  </span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> deploy-stage</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Deploy to production</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> deploy-prod</span></code></pre></div>
+<p><strong>💡 Pro Tip:</strong> The deployment process is designed to be <strong>idempotent</strong> - you can run it multiple times safely, and it will only make necessary changes!</p>
+<hr />
+<p><em>Ready to see the deployment in action? Let’s move to the Container &amp; Kubernetes chapter to understand what happens under the hood!</em> 🚀</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+
+        // Add copy buttons to code blocks
+        document.querySelectorAll('pre').forEach(pre => {
+            const button = document.createElement('button');
+            button.className = 'btn btn-sm btn-outline-primary copy-btn';
+            button.innerHTML = '<i class="fas fa-copy"></i>';
+            button.style.position = 'absolute';
+            button.style.top = '10px';
+            button.style.right = '10px';
+            pre.style.position = 'relative';
+            pre.appendChild(button);
+            button.addEventListener('click', () => {
+                const code = pre.querySelector('code') ? pre.querySelector('code').textContent : pre.textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    button.innerHTML = '<i class="fas fa-check"></i>';
+                    setTimeout(() => button.innerHTML = '<i class="fas fa-copy"></i>', 2000);
+                });
+            });
+        });
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const icon = darkModeToggle.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                darkModeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
+        }
+
+        // Reading progress
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.body.offsetHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('progressBar').style.width = scrollPercent + '%';
+        });
+
+        // Back to top
+        const backToTopBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.style.display = 'block';
+            } else {
+                backToTopBtn.style.display = 'none';
+            }
+        });
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            let found = false;
+            headings.forEach(h => {
+                if (!found && h.textContent.toLowerCase().includes(query)) {
+                    h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    found = true;
+                }
+            });
+        });
+
+        // Get current page number from filename
+        const currentPath = window.location.pathname;
+        const fileName = currentPath.split('/').pop();
+
+        const pageFiles = [
+            '01-executive-summary.html',
+            '02-architecture-overview.html',
+            '03-quick-start-guide.html',
+            '04-automated-deployment.html',
+            '05-container-kubernetes.html',
+            '06-networking-ingress.html',
+            '07-monitoring-observability.html',
+            '08-enterprise-applications.html',
+            '09-security-compliance.html',
+            '10-cloudflare-integration.html',
+            '10-troubleshooting-guide.html',
+            '11-performance-optimization.html',
+            '11-troubleshooting-guide.html',
+            '12-ci-cd-pipeline.html',
+            '13-contributing-development.html',
+            'ABOUT.html',
+            'ADVANCED-TOOLS-INTEGRATION-REPORT.html',
+            'APPLE-SILICON-INTEGRATION.html',
+            'BOOK.html',
+            'CLOUDFLARE-DNS-CLI-SETUP.html',
+            'CONSOLIDATION-COMPLETE.html',
+            'ENHANCEMENT-DOCUMENTATION.html',
+            'GHCR-SETUP-GUIDE.html',
+            'INDEX.html',
+            'KUBERNETES-TROUBLESHOOTING.html',
+            'MAC-MINI-QUICKSTART.html',
+            'README.html',
+            'SCRIPT-SECURITY-AUDIT.html',
+            'SECURITY-SETUP-GUIDE.html'
+        ];
+
+        const pageTitles = pageFiles.map(file => file.replace('.html', '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
+
+        let currentPage = pageFiles.indexOf(fileName) + 1;
+        if (currentPage === 0) currentPage = 1; // for index.html or others
+
+        const totalPages = pageFiles.length;
+
+        // Generate pagination
+        const pagination = document.getElementById('pagination');
+        for (let i = 1; i <= totalPages; i++) {
+            const li = document.createElement('li');
+            li.className = 'page-item' + (i === currentPage ? ' active' : '');
+            const a = document.createElement('a');
+            a.className = 'page-link';
+            a.href = pageFiles[i - 1];
+            a.textContent = i;
+            li.appendChild(a);
+            pagination.appendChild(li);
+        }
+
+        // Update dropdown
+        const dropdown = document.querySelector('.dropdown-menu');
+        dropdown.innerHTML = '';
+        pageFiles.forEach((file, index) => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.className = 'dropdown-item';
+            a.href = file;
+            a.textContent = `${index + 1}. ${pageTitles[index]}`;
+            li.appendChild(a);
+            dropdown.appendChild(li);
+        });
+
+        // Prev/Next buttons
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        if (currentPage > 1) {
+            prevBtn.onclick = () => window.location.href = pageFiles[currentPage - 2];
+        } else {
+            prevBtn.disabled = true;
+        }
+
+        if (currentPage < totalPages) {
+            nextBtn.onclick = () => window.location.href = pageFiles[currentPage];
+        } else {
+            nextBtn.disabled = true;
+        }
+    </script>
+</body>
+
+</html>
+<button id="backToTop" class="btn btn-primary" style="position: fixed; bottom: 20px; right: 20px; display: none; z-index: 1001;"><i class="fas fa-arrow-up"></i></button>
